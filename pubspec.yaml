@@ -1,0 +1,33 @@
+name: cortex
+description: Research-capture & organization for Galaxy Z Fold 6. Local-first. JARVIS HUD.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  # Maintained Isar 3.x fork (upstream isar 3.1.0 is unmaintained on modern AGP).
+  isar_community: &isar_version 3.3.2
+  isar_community_flutter_libs: *isar_version
+  path_provider: ^2.1.5
+  google_fonts: ^6.2.1
+  flutter_displaymode: ^0.6.0
+  flutter_staggered_grid_view: ^0.7.0
+  uuid: ^4.5.1
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.15
+  isar_community_generator: *isar_version
+
+flutter:
+  uses-material-design: true
