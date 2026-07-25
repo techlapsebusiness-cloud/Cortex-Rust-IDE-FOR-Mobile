@@ -1,17 +1,21 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/cortex_colors.dart';
 
-/// Animated cyan pulse border while a drag hovers a drop target (§6).
+/// Cyan pulse overlay while a drag hovers a drop target (§6).
+///
+/// Drawn as an [IgnorePointer] overlay so hover animation never rebuilds or
+/// re-parents [child] (avoids semantics/parentData asserts mid-drag).
 class DropTargetFrame extends StatefulWidget {
   const DropTargetFrame({
     super.key,
-    required this.active,
+    required this.activeListenable,
     required this.child,
     this.borderRadius = 0,
   });
 
-  final bool active;
+  final ValueListenable<bool> activeListenable;
   final Widget child;
   final double borderRadius;
 
@@ -22,7 +26,6 @@ class DropTargetFrame extends StatefulWidget {
 class _DropTargetFrameState extends State<DropTargetFrame>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  late final Animation<double> _pulse;
 
   @override
   void initState() {
@@ -31,18 +34,34 @@ class _DropTargetFrameState extends State<DropTargetFrame>
       vsync: this,
       duration: const Duration(milliseconds: 900),
     );
-    _pulse = Tween<double>(begin: 0.25, end: 0.95).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-    if (widget.active) _controller.repeat(reverse: true);
+    widget.activeListenable.addListener(_syncAnimation);
+    _syncAnimation();
   }
 
   @override
   void didUpdateWidget(covariant DropTargetFrame oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.active && !_controller.isAnimating) {
-      _controller.repeat(reverse: true);
-    } else if (!widget.active && _controller.isAnimating) {
+    if (oldWidget.activeListenable != widget.activeListenable) {
+      oldWidget.activeListenable.removeListener(_syncAnimation);
+      widget.activeListenable.addListener(_syncAnimation);
+      _syncAnimation();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.activeListenable.removeListener(_syncAnimation);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _syncAnimation() {
+    final active = widget.activeListenable.value;
+    if (active) {
+      if (!_controller.isAnimating) {
+        _controller.repeat(reverse: true);
+      }
+    } else if (_controller.isAnimating || _controller.value != 0) {
       _controller
         ..stop()
         ..value = 0;
@@ -50,42 +69,76 @@ class _DropTargetFrameState extends State<DropTargetFrame>
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        widget.child,
+        Positioned.fill(
+          child: IgnorePointer(
+            child: ExcludeSemantics(
+              child: AnimatedBuilder(
+                animation: Listenable.merge([
+                  _controller,
+                  widget.activeListenable,
+                ]),
+                builder: (context, _) {
+                  if (!widget.activeListenable.value) {
+                    return const SizedBox.shrink();
+                  }
+                  return CustomPaint(
+                    painter: _PulseBorderPainter(
+                      progress: _controller.value,
+                      borderRadius: widget.borderRadius,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PulseBorderPainter extends CustomPainter {
+  _PulseBorderPainter({
+    required this.progress,
+    required this.borderRadius,
+  });
+
+  final double progress;
+  final double borderRadius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final t = Curves.easeInOut.transform(progress);
+    final alpha = 0.25 + (0.7 * t);
+    final rect = Offset.zero & size;
+    final rrect = borderRadius > 0
+        ? RRect.fromRectAndRadius(
+            rect.deflate(1),
+            Radius.circular(borderRadius),
+          )
+        : RRect.fromRectAndRadius(rect.deflate(1), Radius.zero);
+
+    final glow = Paint()
+      ..color = CortexColors.accent.withValues(alpha: alpha * 0.35)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 6
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawRRect(rrect, glow);
+
+    final border = Paint()
+      ..color = CortexColors.accent.withValues(alpha: alpha)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawRRect(rrect, border);
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final alpha = widget.active ? _pulse.value : 0.0;
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: widget.borderRadius > 0
-                ? BorderRadius.circular(widget.borderRadius)
-                : null,
-            // Keep a constant border width so hover pulse never relayouts
-            // children (avoids `_debugDoingThisLayout` crashes mid-drop).
-            border: Border.all(
-              color: CortexColors.accent.withValues(alpha: alpha),
-              width: 2,
-            ),
-            boxShadow: widget.active
-                ? [
-                    BoxShadow(
-                      color: CortexColors.accent.withValues(alpha: alpha * 0.35),
-                      blurRadius: 18,
-                      spreadRadius: 1,
-                    ),
-                  ]
-                : null,
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
-  }
+  bool shouldRepaint(covariant _PulseBorderPainter oldDelegate) =>
+      oldDelegate.progress != progress ||
+      oldDelegate.borderRadius != borderRadius;
 }

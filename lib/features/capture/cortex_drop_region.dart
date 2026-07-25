@@ -32,8 +32,14 @@ class CortexDropRegion extends ConsumerStatefulWidget {
 }
 
 class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
-  var _hovering = false;
+  final ValueNotifier<bool> _hovering = ValueNotifier(false);
   var _busy = false;
+
+  @override
+  void dispose() {
+    _hovering.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +47,12 @@ class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
       formats: cortexDropFormats,
       hitTestBehavior: widget.hitTestBehavior,
       onDropOver: (event) => DropOperation.copy,
-      onDropEnter: (_) {
-        if (!_hovering) setState(() => _hovering = true);
-      },
-      onDropLeave: (_) {
-        if (_hovering) setState(() => _hovering = false);
-      },
-      onDropEnded: (_) {
-        if (_hovering) setState(() => _hovering = false);
-      },
+      onDropEnter: (_) => _hovering.value = true,
+      onDropLeave: (_) => _hovering.value = false,
+      onDropEnded: (_) => _hovering.value = false,
       onPerformDrop: (event) async {
-        // Stay inside onPerformDrop until getValue/getFile are registered
-        // (and preferably until data arrives). Returning early disposes the
-        // DataReader — that was breaking text drops from Chrome.
+        // Stay inside onPerformDrop until getValue/getFile are registered.
+        // Returning early disposes the DataReader.
         if (_busy) return;
         _busy = true;
         final messenger = ScaffoldMessenger.maybeOf(context);
@@ -69,11 +68,11 @@ class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
           );
         } finally {
           _busy = false;
-          if (mounted && _hovering) setState(() => _hovering = false);
+          _hovering.value = false;
         }
       },
       child: DropTargetFrame(
-        active: _hovering,
+        activeListenable: _hovering,
         borderRadius: widget.borderRadius,
         child: widget.child,
       ),
