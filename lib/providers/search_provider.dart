@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar_community/isar.dart';
 
 import '../data/models/item.dart';
 import '../data/models/item_type.dart';
