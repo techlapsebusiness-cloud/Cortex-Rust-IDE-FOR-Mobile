@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/topic.dart';
 import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
-import '../feed/topic_feed_placeholder.dart';
+import '../feed/topic_feed.dart';
 import '../search/search_placeholder.dart';
 import '../settings/settings_placeholder.dart';
 import '../topics/topics_pane.dart';
@@ -98,7 +98,7 @@ class _NarrowShell extends ConsumerWidget {
         pageBuilder: (context, animation, secondary) {
           return FadeTransition(
             opacity: animation,
-            child: const TopicFeedPlaceholder(showBack: true),
+            child: const TopicFeed(showBack: true),
           );
         },
         transitionDuration: const Duration(milliseconds: 200),
@@ -145,7 +145,7 @@ class _WideShell extends ConsumerWidget {
             child: const TopicsPane(embedded: true),
           ),
           Container(width: 1, color: CortexColors.hairline),
-          const Expanded(child: TopicFeedPlaceholder()),
+          const Expanded(child: TopicFeed()),
         ],
       ),
       bottomNavigationBar: _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
