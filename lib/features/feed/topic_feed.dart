@@ -271,21 +271,36 @@ class _FeedBody extends ConsumerWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 final item = items[index];
-                return ItemCard(
-                  item: item,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      PageRouteBuilder<void>(
-                        pageBuilder: (context, animation, secondary) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: ItemDetailPage(itemId: item.id),
-                          );
-                        },
-                        transitionDuration: const Duration(milliseconds: 200),
+                return TweenAnimationBuilder<double>(
+                  key: ValueKey(item.id),
+                  tween: Tween(begin: 0, end: 1),
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOut,
+                  builder: (context, value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.translate(
+                        offset: Offset(0, 12 * (1 - value)),
+                        child: child,
                       ),
                     );
                   },
+                  child: ItemCard(
+                    item: item,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder<void>(
+                          pageBuilder: (context, animation, secondary) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: ItemDetailPage(itemId: item.id),
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 200),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             );

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'features/capture/share_intent_listener.dart';
 import 'features/home/home_shell.dart';
+import 'features/onboarding/onboarding_page.dart';
 import 'providers/isar_provider.dart';
+import 'providers/settings_provider.dart';
 import 'theme/cortex_colors.dart';
 import 'theme/cortex_theme.dart';
 
@@ -15,6 +17,7 @@ class CortexApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isar = ref.watch(isarProvider);
+    final onboarding = ref.watch(onboardingDoneProvider);
 
     return ShareIntentListener(
       navigatorKey: cortexNavigatorKey,
@@ -26,7 +29,18 @@ class CortexApp extends ConsumerWidget {
         home: isar.when(
           loading: () => const _BootScreen(),
           error: (e, _) => _BootScreen(error: '$e'),
-          data: (_) => const HomeShell(),
+          data: (_) => onboarding.when(
+            loading: () => const _BootScreen(),
+            error: (e, _) => _BootScreen(error: '$e'),
+            data: (done) {
+              if (!done) {
+                return OnboardingPage(
+                  onDone: () => ref.invalidate(sharedPrefsProvider),
+                );
+              }
+              return const HomeShell();
+            },
+          ),
         ),
       ),
     );

@@ -9,6 +9,7 @@ import '../../data/models/item_type.dart';
 import '../../data/models/topic.dart';
 import '../../providers/capture_provider.dart';
 import '../../providers/items_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
@@ -63,8 +64,10 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _topicId ??= ref.read(selectedTopicIdProvider) ??
-        ref.read(captureTargetTopicIdProvider);
+    _topicId ??= widget.initialTopicId ??
+        ref.read(captureTargetTopicIdProvider) ??
+        ref.read(selectedTopicIdProvider) ??
+        ref.read(defaultCaptureTopicIdProvider).valueOrNull;
   }
 
   @override

@@ -6,7 +6,7 @@ import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../feed/topic_feed.dart';
 import '../search/global_search.dart';
-import '../settings/settings_placeholder.dart';
+import '../settings/settings_page.dart';
 import '../topics/topics_pane.dart';
 
 /// Breakpoint for Fold unfolded two-pane layout (§9).
@@ -58,7 +58,7 @@ class _NarrowShell extends ConsumerWidget {
         onTopicSelected: (topic) => _openFeed(context, topic),
       ),
       const GlobalSearchPage(),
-      const SettingsPlaceholder(),
+      const SettingsPage(),
     ];
 
     return Scaffold(
@@ -131,7 +131,7 @@ class _WideShell extends ConsumerWidget {
     if (tabIndex == 2) {
       return Scaffold(
         backgroundColor: CortexColors.background,
-        body: const SettingsPlaceholder(),
+        body: const SettingsPage(),
         bottomNavigationBar:
             _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
       );
