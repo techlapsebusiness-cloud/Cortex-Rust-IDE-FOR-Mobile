@@ -19,33 +19,85 @@ const cortexDropFormats = <DataFormat<Object>>[
   Formats.webp,
 ];
 
-/// Reads a [PerformDropEvent] into capture payloads.
-/// Call via `unawaited` from `onPerformDrop` so the platform thread stays free.
+/// Starts reading every drop item **synchronously** (no awaits), then resolves
+/// payloads. Must be invoked directly from `onPerformDrop` — never after an
+/// async gap / `unawaited`, or the DataReader is disposed.
 Future<List<CapturePayload>> readDropPayloads(PerformDropEvent event) async {
-  final out = <CapturePayload>[];
+  final pending = <_PendingItem>[];
   for (final item in event.session.items) {
     final reader = item.dataReader;
     if (reader == null) continue;
-    final payload = await _readItem(reader);
+    pending.add(_PendingItem.start(reader));
+  }
+  final out = <CapturePayload>[];
+  for (final p in pending) {
+    final payload = await p.resolve();
     if (payload != null) out.add(payload);
   }
   return out;
 }
 
-Future<CapturePayload?> _readItem(DataReader reader) async {
-  final png = await _readFileBytes(reader, Formats.png, 'image.png', 'image/png');
-  if (png != null) return png;
-  final jpeg =
-      await _readFileBytes(reader, Formats.jpeg, 'image.jpg', 'image/jpeg');
-  if (jpeg != null) return jpeg;
-  final webp =
-      await _readFileBytes(reader, Formats.webp, 'image.webp', 'image/webp');
-  if (webp != null) return webp;
+/// All `getValue` / `getFile` calls happen in [start] with zero awaits.
+class _PendingItem {
+  _PendingItem._({
+    required this.png,
+    required this.jpeg,
+    required this.webp,
+    required this.fileUri,
+    required this.namedUri,
+    required this.plainText,
+  });
 
-  if (reader.canProvide(Formats.fileUri)) {
-    final uri = await _readValue<Uri>(reader, Formats.fileUri);
-    if (uri != null) {
-      final path = uri.toFilePath();
+  factory _PendingItem.start(DataReader reader) {
+    return _PendingItem._(
+      png: _startFile(reader, Formats.png),
+      jpeg: _startFile(reader, Formats.jpeg),
+      webp: _startFile(reader, Formats.webp),
+      fileUri: _startValue<Uri>(reader, Formats.fileUri),
+      namedUri: _startValue<NamedUri>(reader, Formats.uri),
+      plainText: _startValue<String>(reader, Formats.plainText),
+    );
+  }
+
+  final Future<Uint8List?> png;
+  final Future<Uint8List?> jpeg;
+  final Future<Uint8List?> webp;
+  final Future<Uri?> fileUri;
+  final Future<NamedUri?> namedUri;
+  final Future<String?> plainText;
+
+  Future<CapturePayload?> resolve() async {
+    final pngBytes = await png;
+    if (pngBytes != null && pngBytes.isNotEmpty) {
+      return CapturePayload(
+        type: ItemType.image,
+        bytes: pngBytes,
+        fileName: 'image.png',
+        mimeType: 'image/png',
+      );
+    }
+    final jpegBytes = await jpeg;
+    if (jpegBytes != null && jpegBytes.isNotEmpty) {
+      return CapturePayload(
+        type: ItemType.image,
+        bytes: jpegBytes,
+        fileName: 'image.jpg',
+        mimeType: 'image/jpeg',
+      );
+    }
+    final webpBytes = await webp;
+    if (webpBytes != null && webpBytes.isNotEmpty) {
+      return CapturePayload(
+        type: ItemType.image,
+        bytes: webpBytes,
+        fileName: 'image.webp',
+        mimeType: 'image/webp',
+      );
+    }
+
+    final file = await fileUri;
+    if (file != null) {
+      final path = file.toFilePath();
       final type = ItemsRepository.typeFromMime(null, path: path);
       return CapturePayload(
         type: type,
@@ -53,10 +105,8 @@ Future<CapturePayload?> _readItem(DataReader reader) async {
         fileName: path.split(RegExp(r'[/\\]')).last,
       );
     }
-  }
 
-  if (reader.canProvide(Formats.uri)) {
-    final named = await _readValue<NamedUri>(reader, Formats.uri);
+    final named = await namedUri;
     final uri = named?.uri;
     if (uri != null) {
       if (uri.scheme == 'http' || uri.scheme == 'https') {
@@ -76,77 +126,73 @@ Future<CapturePayload?> _readItem(DataReader reader) async {
         return CapturePayload(type: ItemType.link, sourceUrl: asString);
       }
     }
-  }
 
-  if (reader.canProvide(Formats.plainText)) {
-    final text = await _readValue<String>(reader, Formats.plainText);
-    final trimmed = text?.trim();
-    if (trimmed == null || trimmed.isEmpty) return null;
-    if (ItemsRepository.looksLikeUrl(trimmed)) {
-      return CapturePayload(type: ItemType.link, sourceUrl: trimmed);
+    final text = (await plainText)?.trim();
+    if (text != null && text.isNotEmpty) {
+      if (ItemsRepository.looksLikeUrl(text)) {
+        return CapturePayload(type: ItemType.link, sourceUrl: text);
+      }
+      return CapturePayload(type: ItemType.text, text: text);
     }
-    return CapturePayload(type: ItemType.text, text: trimmed);
+
+    return null;
   }
-
-  return null;
 }
 
-Future<CapturePayload?> _readFileBytes(
-  DataReader reader,
-  FileFormat format,
-  String fileName,
-  String mimeType,
-) async {
-  if (!reader.canProvide(format)) return null;
-  final bytes = await _readFileFormat(reader, format);
-  if (bytes == null || bytes.isEmpty) return null;
-  return CapturePayload(
-    type: ItemType.image,
-    bytes: bytes,
-    fileName: fileName,
-    mimeType: mimeType,
-  );
-}
-
-Future<T?> _readValue<T extends Object>(
+Future<T?> _startValue<T extends Object>(
   DataReader reader,
   ValueFormat<T> format,
 ) {
+  if (!reader.canProvide(format)) return Future<T?>.value(null);
+
   final completer = Completer<T?>();
-  reader.getValue<T>(
-    format,
-    (value) {
-      if (!completer.isCompleted) completer.complete(value);
-    },
-    onError: (error) {
-      debugPrint('CORTEX drop value error: $error');
-      if (!completer.isCompleted) completer.complete(null);
-    },
-  );
+  try {
+    // Must run before any await in the caller (super_clipboard invariant).
+    reader.getValue<T>(
+      format,
+      (value) {
+        if (!completer.isCompleted) completer.complete(value);
+      },
+      onError: (error) {
+        debugPrint('CORTEX drop value error: $error');
+        if (!completer.isCompleted) completer.complete(null);
+      },
+    );
+  } catch (e) {
+    debugPrint('CORTEX drop getValue failed: $e');
+    if (!completer.isCompleted) completer.complete(null);
+  }
   return completer.future.timeout(
     const Duration(seconds: 8),
     onTimeout: () => null,
   );
 }
 
-Future<Uint8List?> _readFileFormat(DataReader reader, FileFormat format) {
+Future<Uint8List?> _startFile(DataReader reader, FileFormat format) {
+  if (!reader.canProvide(format)) return Future<Uint8List?>.value(null);
+
   final completer = Completer<Uint8List?>();
-  reader.getFile(
-    format,
-    (file) async {
-      try {
-        final bytes = await file.readAll();
-        if (!completer.isCompleted) completer.complete(bytes);
-      } catch (e) {
-        debugPrint('CORTEX drop file read error: $e');
+  try {
+    reader.getFile(
+      format,
+      (file) {
+        // Don't await here — schedule read without blocking getFile return.
+        file.readAll().then((bytes) {
+          if (!completer.isCompleted) completer.complete(bytes);
+        }).catchError((Object e) {
+          debugPrint('CORTEX drop file read error: $e');
+          if (!completer.isCompleted) completer.complete(null);
+        });
+      },
+      onError: (error) {
+        debugPrint('CORTEX drop file error: $error');
         if (!completer.isCompleted) completer.complete(null);
-      }
-    },
-    onError: (error) {
-      debugPrint('CORTEX drop file error: $error');
-      if (!completer.isCompleted) completer.complete(null);
-    },
-  );
+      },
+    );
+  } catch (e) {
+    debugPrint('CORTEX drop getFile failed: $e');
+    if (!completer.isCompleted) completer.complete(null);
+  }
   return completer.future.timeout(
     const Duration(seconds: 15),
     onTimeout: () => null,

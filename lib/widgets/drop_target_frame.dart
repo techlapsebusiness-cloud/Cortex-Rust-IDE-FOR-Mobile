@@ -66,9 +66,11 @@ class _DropTargetFrameState extends State<DropTargetFrame>
             borderRadius: widget.borderRadius > 0
                 ? BorderRadius.circular(widget.borderRadius)
                 : null,
+            // Keep a constant border width so hover pulse never relayouts
+            // children (avoids `_debugDoingThisLayout` crashes mid-drop).
             border: Border.all(
               color: CortexColors.accent.withValues(alpha: alpha),
-              width: widget.active ? 2 : 0,
+              width: 2,
             ),
             boxShadow: widget.active
                 ? [

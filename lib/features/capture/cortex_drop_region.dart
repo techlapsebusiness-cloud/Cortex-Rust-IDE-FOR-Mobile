@@ -33,16 +33,14 @@ class CortexDropRegion extends ConsumerStatefulWidget {
 
 class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
   var _hovering = false;
+  var _busy = false;
 
   @override
   Widget build(BuildContext context) {
     return DropRegion(
       formats: cortexDropFormats,
       hitTestBehavior: widget.hitTestBehavior,
-      onDropOver: (event) {
-        // Formats advertised are enough on Android during hover.
-        return DropOperation.copy;
-      },
+      onDropOver: (event) => DropOperation.copy,
       onDropEnter: (_) {
         if (!_hovering) setState(() => _hovering = true);
       },
@@ -53,8 +51,26 @@ class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
         if (_hovering) setState(() => _hovering = false);
       },
       onPerformDrop: (event) async {
-        // Do not await DataReader callbacks here — process off the platform thread.
-        unawaited(_handle(event));
+        // Stay inside onPerformDrop until getValue/getFile are registered
+        // (and preferably until data arrives). Returning early disposes the
+        // DataReader — that was breaking text drops from Chrome.
+        if (_busy) return;
+        _busy = true;
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        final onPayloads = widget.onPayloads;
+        try {
+          final payloads = await readDropPayloads(event);
+          if (!mounted || payloads.isEmpty) return;
+          await onPayloads(payloads);
+        } catch (e, st) {
+          debugPrint('CORTEX drop handle error: $e\n$st');
+          messenger?.showSnackBar(
+            SnackBar(content: Text('DROP FAILED: $e')),
+          );
+        } finally {
+          _busy = false;
+          if (mounted && _hovering) setState(() => _hovering = false);
+        }
       },
       child: DropTargetFrame(
         active: _hovering,
@@ -62,19 +78,5 @@ class _CortexDropRegionState extends ConsumerState<CortexDropRegion> {
         child: widget.child,
       ),
     );
-  }
-
-  Future<void> _handle(PerformDropEvent event) async {
-    try {
-      final payloads = await readDropPayloads(event);
-      if (!mounted || payloads.isEmpty) return;
-      await widget.onPayloads(payloads);
-    } catch (e, st) {
-      debugPrint('CORTEX drop handle error: $e\n$st');
-      if (!mounted) return;
-      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-        SnackBar(content: Text('DROP FAILED: $e')),
-      );
-    }
   }
 }
