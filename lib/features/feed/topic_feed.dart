@@ -92,7 +92,15 @@ class _FeedBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accent = Color(topic.colorValue);
     final filter = ref.watch(feedFilterProvider(topic.id));
+    final tagFilter = ref.watch(feedTagFilterProvider(topic.id));
+    final allItems = ref.watch(topicItemsProvider(topic.id)).valueOrNull ?? [];
+    final topicTags = {
+      for (final i in allItems)
+        ...i.tags.map((t) => t.toLowerCase()),
+    }.toList()
+      ..sort();
     final itemsAsync = ref.watch(filteredTopicItemsProvider(topic.id));
+    final headerHeight = topicTags.isEmpty ? 96.0 : 136.0;
 
     return CortexDropRegion(
       onPayloads: (payloads) => quickAddWithUndo(
@@ -129,7 +137,7 @@ class _FeedBody extends ConsumerWidget {
                 ),
               ),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(96),
+                preferredSize: Size.fromHeight(headerHeight),
                 child: Column(
                   children: [
                     SizedBox(
@@ -155,7 +163,9 @@ class _FeedBody extends ConsumerWidget {
                                 showCheckmark: false,
                                 selectedColor: CortexColors.accent,
                                 backgroundColor: CortexColors.surface,
-                                side: const BorderSide(color: CortexColors.hairline),
+                                side: const BorderSide(
+                                  color: CortexColors.hairline,
+                                ),
                                 onSelected: (_) {
                                   ref
                                       .read(
@@ -168,26 +178,73 @@ class _FeedBody extends ConsumerWidget {
                         ],
                       ),
                     ),
+                    if (topicTags.isNotEmpty)
+                      SizedBox(
+                        height: 36,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          children: [
+                            for (final tag in topicTags)
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: FilterChip(
+                                  label: Text(
+                                    '#$tag',
+                                    style: CortexTheme.mono(
+                                      fontSize: 10,
+                                      color: tagFilter == tag
+                                          ? CortexColors.background
+                                          : CortexColors.secondaryGlow,
+                                    ),
+                                  ),
+                                  selected: tagFilter == tag,
+                                  showCheckmark: false,
+                                  selectedColor: CortexColors.secondaryGlow,
+                                  backgroundColor: CortexColors.surface,
+                                  visualDensity: VisualDensity.compact,
+                                  side: const BorderSide(
+                                    color: CortexColors.hairline,
+                                  ),
+                                  onSelected: (_) {
+                                    ref
+                                        .read(
+                                          feedTagFilterProvider(topic.id)
+                                              .notifier,
+                                        )
+                                        .state =
+                                        tagFilter == tag ? null : tag;
+                                  },
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
                       child: TextField(
                         controller: searchController,
-                        style: CortexTheme.mono(fontSize: 13, color: CortexColors.text),
-                        decoration: InputDecoration(
+                        style: CortexTheme.mono(
+                          fontSize: 13,
+                          color: CortexColors.text,
+                        ),
+                        decoration: const InputDecoration(
                           isDense: true,
                           hintText: 'Filter in topic…',
-                          prefixIcon: const Icon(
+                          prefixIcon: Icon(
                             Icons.search,
                             size: 18,
                             color: CortexColors.muted,
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
+                          contentPadding: EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 10,
                           ),
                         ),
                         onChanged: (v) {
-                          ref.read(feedQueryProvider(topic.id).notifier).state = v;
+                          ref
+                              .read(feedQueryProvider(topic.id).notifier)
+                              .state = v;
                         },
                       ),
                     ),

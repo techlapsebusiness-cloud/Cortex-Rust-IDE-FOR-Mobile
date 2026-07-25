@@ -5,7 +5,7 @@ import '../../data/models/topic.dart';
 import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../feed/topic_feed.dart';
-import '../search/search_placeholder.dart';
+import '../search/global_search.dart';
 import '../settings/settings_placeholder.dart';
 import '../topics/topics_pane.dart';
 
@@ -57,7 +57,7 @@ class _NarrowShell extends ConsumerWidget {
       TopicsPane(
         onTopicSelected: (topic) => _openFeed(context, topic),
       ),
-      const SearchPlaceholder(),
+      const GlobalSearchPage(),
       const SettingsPlaceholder(),
     ];
 
@@ -70,21 +70,20 @@ class _NarrowShell extends ConsumerWidget {
         selectedIndex: tabIndex,
         onDestinationSelected: onTabChanged,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        destinations: [
+        destinations: const [
           NavigationDestination(
-            icon: const Icon(Icons.grid_view_outlined, color: CortexColors.muted),
-            selectedIcon:
-                const Icon(Icons.grid_view, color: CortexColors.accent),
+            icon: Icon(Icons.grid_view_outlined, color: CortexColors.muted),
+            selectedIcon: Icon(Icons.grid_view, color: CortexColors.accent),
             label: 'Topics',
           ),
           NavigationDestination(
-            icon: const Icon(Icons.search, color: CortexColors.muted),
-            selectedIcon: const Icon(Icons.search, color: CortexColors.accent),
+            icon: Icon(Icons.search, color: CortexColors.muted),
+            selectedIcon: Icon(Icons.search, color: CortexColors.accent),
             label: 'Search',
           ),
           NavigationDestination(
-            icon: const Icon(Icons.tune, color: CortexColors.muted),
-            selectedIcon: const Icon(Icons.tune, color: CortexColors.accent),
+            icon: Icon(Icons.tune, color: CortexColors.muted),
+            selectedIcon: Icon(Icons.tune, color: CortexColors.accent),
             label: 'Settings',
           ),
         ],
@@ -124,15 +123,17 @@ class _WideShell extends ConsumerWidget {
     if (tabIndex == 1) {
       return Scaffold(
         backgroundColor: CortexColors.background,
-        body: const SearchPlaceholder(),
-        bottomNavigationBar: _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
+        body: const GlobalSearchPage(),
+        bottomNavigationBar:
+            _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
       );
     }
     if (tabIndex == 2) {
       return Scaffold(
         backgroundColor: CortexColors.background,
         body: const SettingsPlaceholder(),
-        bottomNavigationBar: _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
+        bottomNavigationBar:
+            _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
       );
     }
 

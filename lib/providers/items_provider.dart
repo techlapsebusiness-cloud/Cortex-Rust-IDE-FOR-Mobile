@@ -22,6 +22,11 @@ final feedQueryProvider = StateProvider.family<String, int>((ref, topicId) {
   return '';
 });
 
+/// Per-topic tag filter for the feed.
+final feedTagFilterProvider = StateProvider.family<String?, int>((ref, topicId) {
+  return null;
+});
+
 final topicItemsProvider =
     StreamProvider.family<List<Item>, int>((ref, topicId) async* {
   final isar = await ref.watch(isarProvider.future);
@@ -45,6 +50,7 @@ final filteredTopicItemsProvider =
   final items = ref.watch(topicItemsProvider(topicId));
   final filter = ref.watch(feedFilterProvider(topicId));
   final query = ref.watch(feedQueryProvider(topicId)).trim().toLowerCase();
+  final tag = ref.watch(feedTagFilterProvider(topicId))?.toLowerCase();
 
   return items.whenData((list) {
     Iterable<Item> out = list;
@@ -64,6 +70,11 @@ final filteredTopicItemsProvider =
     }
     if (query.isNotEmpty) {
       out = out.where((i) => i.searchText.contains(query));
+    }
+    if (tag != null && tag.isNotEmpty) {
+      out = out.where(
+        (i) => i.tags.any((t) => t.toLowerCase() == tag),
+      );
     }
     return out.toList();
   });
