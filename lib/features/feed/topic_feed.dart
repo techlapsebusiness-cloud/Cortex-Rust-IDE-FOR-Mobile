@@ -7,6 +7,8 @@ import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
 import '../../widgets/hud_brackets.dart';
+import '../capture/cortex_drop_region.dart';
+import '../capture/quick_capture.dart';
 import 'item_detail.dart';
 import 'manual_add_sheet.dart';
 import 'widgets/item_card.dart';
@@ -92,7 +94,14 @@ class _FeedBody extends ConsumerWidget {
     final filter = ref.watch(feedFilterProvider(topic.id));
     final itemsAsync = ref.watch(filteredTopicItemsProvider(topic.id));
 
-    return Scaffold(
+    return CortexDropRegion(
+      onPayloads: (payloads) => quickAddWithUndo(
+        context,
+        ref,
+        topic: topic,
+        payloads: payloads,
+      ),
+      child: Scaffold(
       backgroundColor: CortexColors.background,
       floatingActionButton: FloatingActionButton(
         onPressed: () => showManualAddSheet(context, topic: topic),
@@ -226,6 +235,7 @@ class _FeedBody extends ConsumerWidget {
           },
         ),
       ),
+    ),
     );
   }
 

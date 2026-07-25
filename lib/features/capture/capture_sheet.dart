@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../capture/capture_payload.dart';
+import '../../capture/persist_payload.dart';
 import '../../data/models/item_type.dart';
 import '../../data/models/topic.dart';
 import '../../providers/capture_provider.dart';
@@ -258,7 +259,13 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
 
     try {
       for (final payload in widget.payloads) {
-        await _persistOne(repo, topic, payload, note: note, tags: tags);
+        await persistCapturePayload(
+          repo,
+          topic,
+          payload,
+          note: note,
+          tags: tags,
+        );
       }
       ref.read(selectedTopicIdProvider.notifier).state = topic.id;
       clearCapture(ref);
@@ -284,54 +291,6 @@ class _CaptureSheetState extends ConsumerState<CaptureSheet> {
       );
     } finally {
       if (mounted) setState(() => _saving = false);
-    }
-  }
-
-  Future<void> _persistOne(
-    ItemsRepository repo,
-    Topic topic,
-    CapturePayload payload, {
-    String? note,
-    List<String> tags = const [],
-  }) async {
-    switch (payload.type) {
-      case ItemType.text:
-        await repo.addText(
-          topic: topic,
-          text: payload.text ?? '',
-          note: note,
-          tags: tags,
-          sourceUrl: payload.sourceUrl,
-        );
-      case ItemType.link:
-        await repo.addLink(
-          topic: topic,
-          url: payload.sourceUrl ?? payload.text ?? '',
-          note: note,
-          tags: tags,
-        );
-      case ItemType.image:
-      case ItemType.video:
-      case ItemType.file:
-        final path = payload.filePath;
-        if (path == null || path.isEmpty) {
-          throw StateError('Missing file path for ${payload.type.name}');
-        }
-        // Content URIs may not be regular files; copy via File if exists.
-        final file = File(path);
-        if (!await file.exists()) {
-          throw StateError('Shared file unavailable: $path');
-        }
-        await repo.addFileFromPath(
-          topic: topic,
-          path: path,
-          type: payload.type,
-          fileName: payload.fileName,
-          mimeType: payload.mimeType,
-          note: note,
-          tags: tags,
-          sourceUrl: payload.sourceUrl,
-        );
     }
   }
 }

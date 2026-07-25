@@ -6,6 +6,8 @@ import '../../data/models/topic.dart';
 import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
+import '../capture/cortex_drop_region.dart';
+import '../capture/quick_capture.dart';
 import 'topic_card.dart';
 import 'topic_editor_sheet.dart';
 
@@ -25,102 +27,122 @@ class TopicsPane extends ConsumerWidget {
     final topicsAsync = ref.watch(topicsProvider);
     final selectedId = ref.watch(selectedTopicIdProvider);
 
-    return Scaffold(
-      backgroundColor: CortexColors.background,
-      appBar: AppBar(
-        title: Text(
-          'CORTEX',
-          style: CortexTheme.orbitron(fontSize: 18, color: CortexColors.accent),
-        ),
+    return CortexDropRegion(
+      onPayloads: (payloads) => openCaptureForDrop(
+        context,
+        ref,
+        payloads: payloads,
+        targetTopicId: selectedId,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _createTopic(context, ref),
-        child: const Icon(Icons.add),
-      ),
-      body: topicsAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: CortexColors.accent),
-        ),
-        error: (e, _) => Center(
-          child: Text(
-            'DB ERROR: $e',
-            style: CortexTheme.mono(color: CortexColors.danger),
+      child: Scaffold(
+        backgroundColor: CortexColors.background,
+        appBar: AppBar(
+          title: Text(
+            'CORTEX',
+            style:
+                CortexTheme.orbitron(fontSize: 18, color: CortexColors.accent),
           ),
         ),
-        data: (topics) {
-          if (topics.isEmpty) {
-            return _EmptyTopics(onCreate: () => _createTopic(context, ref));
-          }
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final cols = constraints.maxWidth >= 520
-                  ? 3
-                  : constraints.maxWidth >= 340
-                      ? 2
-                      : 1;
-              // Drag-reorder when single column; grid otherwise.
-              if (cols == 1) {
-                return ReorderableListView.builder(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _createTopic(context, ref),
+          child: const Icon(Icons.add),
+        ),
+        body: topicsAsync.when(
+          loading: () => const Center(
+            child: CircularProgressIndicator(color: CortexColors.accent),
+          ),
+          error: (e, _) => Center(
+            child: Text(
+              'DB ERROR: $e',
+              style: CortexTheme.mono(color: CortexColors.danger),
+            ),
+          ),
+          data: (topics) {
+            if (topics.isEmpty) {
+              return _EmptyTopics(onCreate: () => _createTopic(context, ref));
+            }
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final cols = constraints.maxWidth >= 520
+                    ? 3
+                    : constraints.maxWidth >= 340
+                        ? 2
+                        : 1;
+                if (cols == 1) {
+                  return ReorderableListView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+                    proxyDecorator: (child, index, animation) {
+                      return Material(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        child: child,
+                      );
+                    },
+                    onReorder: (oldIndex, newIndex) async {
+                      if (newIndex > oldIndex) newIndex -= 1;
+                      final repo =
+                          ref.read(topicsRepositoryProvider).valueOrNull;
+                      if (repo == null) return;
+                      await repo.reorder(topics[oldIndex].id, newIndex);
+                    },
+                    itemCount: topics.length,
+                    itemBuilder: (context, index) {
+                      final topic = topics[index];
+                      return Padding(
+                        key: ValueKey(topic.id),
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _TopicCardSlot(
+                          topic: topic,
+                          selected: embedded && selectedId == topic.id,
+                          onTap: () {
+                            ref.read(selectedTopicIdProvider.notifier).state =
+                                topic.id;
+                            onTopicSelected?.call(topic);
+                          },
+                          onLongPress: () =>
+                              _showTopicActions(context, ref, topic, topics),
+                          onDrop: (payloads) => openCaptureForDrop(
+                            context,
+                            ref,
+                            payloads: payloads,
+                            targetTopicId: topic.id,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+                return MasonryGridView.count(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-                  proxyDecorator: (child, index, animation) {
-                    return Material(
-                      color: Colors.transparent,
-                      elevation: 0,
-                      child: child,
-                    );
-                  },
-                  onReorder: (oldIndex, newIndex) async {
-                    if (newIndex > oldIndex) newIndex -= 1;
-                    final repo =
-                        ref.read(topicsRepositoryProvider).valueOrNull;
-                    if (repo == null) return;
-                    await repo.reorder(topics[oldIndex].id, newIndex);
-                  },
+                  crossAxisCount: cols,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
                   itemCount: topics.length,
                   itemBuilder: (context, index) {
                     final topic = topics[index];
-                    return Padding(
-                      key: ValueKey(topic.id),
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _TopicCardSlot(
-                        topic: topic,
-                        selected: embedded && selectedId == topic.id,
-                        onTap: () {
-                          ref.read(selectedTopicIdProvider.notifier).state =
-                              topic.id;
-                          onTopicSelected?.call(topic);
-                        },
-                        onLongPress: () =>
-                            _showTopicActions(context, ref, topic, topics),
+                    return _TopicCardSlot(
+                      topic: topic,
+                      selected: embedded && selectedId == topic.id,
+                      onTap: () {
+                        ref.read(selectedTopicIdProvider.notifier).state =
+                            topic.id;
+                        onTopicSelected?.call(topic);
+                      },
+                      onLongPress: () =>
+                          _showTopicActions(context, ref, topic, topics),
+                      onDrop: (payloads) => openCaptureForDrop(
+                        context,
+                        ref,
+                        payloads: payloads,
+                        targetTopicId: topic.id,
                       ),
                     );
                   },
                 );
-              }
-              return MasonryGridView.count(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
-                crossAxisCount: cols,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                itemCount: topics.length,
-                itemBuilder: (context, index) {
-                  final topic = topics[index];
-                  return _TopicCardSlot(
-                    topic: topic,
-                    selected: embedded && selectedId == topic.id,
-                    onTap: () {
-                      ref.read(selectedTopicIdProvider.notifier).state =
-                          topic.id;
-                      onTopicSelected?.call(topic);
-                    },
-                    onLongPress: () =>
-                        _showTopicActions(context, ref, topic, topics),
-                  );
-                },
-              );
-            },
-          );
-        },
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -251,29 +273,36 @@ class _TopicCardSlot extends StatelessWidget {
     required this.selected,
     required this.onTap,
     required this.onLongPress,
+    required this.onDrop,
   });
 
   final Topic topic;
   final bool selected;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
+  final CaptureDropHandler onDrop;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<int>(
-      future: () async {
-        await topic.items.load();
-        return topic.items.length;
-      }(),
-      builder: (context, snap) {
-        return TopicCard(
-          topic: topic,
-          itemCount: snap.data ?? 0,
-          selected: selected,
-          onTap: onTap,
-          onLongPress: onLongPress,
-        );
-      },
+    return CortexDropRegion(
+      borderRadius: 16,
+      hitTestBehavior: HitTestBehavior.opaque,
+      onPayloads: onDrop,
+      child: FutureBuilder<int>(
+        future: () async {
+          await topic.items.load();
+          return topic.items.length;
+        }(),
+        builder: (context, snap) {
+          return TopicCard(
+            topic: topic,
+            itemCount: snap.data ?? 0,
+            selected: selected,
+            onTap: onTap,
+            onLongPress: onLongPress,
+          );
+        },
+      ),
     );
   }
 }

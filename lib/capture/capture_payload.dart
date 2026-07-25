@@ -3,7 +3,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import '../data/models/item_type.dart';
 import '../providers/items_provider.dart';
 
-/// Normalized share / drop payload ready for CaptureSheet.
+/// Normalized share / drop payload ready for CaptureSheet or quick-add.
 class CapturePayload {
   const CapturePayload({
     required this.type,
@@ -12,6 +12,7 @@ class CapturePayload {
     this.filePath,
     this.fileName,
     this.mimeType,
+    this.bytes,
   });
 
   final ItemType type;
@@ -20,6 +21,9 @@ class CapturePayload {
   final String? filePath;
   final String? fileName;
   final String? mimeType;
+
+  /// In-memory bytes from drag formats (png/jpeg/webp).
+  final List<int>? bytes;
 
   String get previewLabel {
     switch (type) {
@@ -50,7 +54,6 @@ class CapturePayload {
     final mime = f.mimeType;
     final type = f.type;
 
-    // Text / URL shares often arrive as SharedMediaType.text with path holding the string.
     if (type == SharedMediaType.text || type == SharedMediaType.url) {
       final content = (f.path.isNotEmpty ? f.path : (f.message ?? '')).trim();
       if (content.isEmpty) return null;
@@ -86,7 +89,6 @@ class CapturePayload {
       );
     }
 
-    // Generic file
     if (path.isEmpty) {
       final msg = (f.message ?? '').trim();
       if (msg.isEmpty) return null;

@@ -140,6 +140,35 @@ class ItemsRepository {
     );
   }
 
+  Future<Item> addFileFromBytes({
+    required Topic topic,
+    required List<int> bytes,
+    required ItemType type,
+    required String fileName,
+    String? mimeType,
+    String? note,
+    List<String> tags = const [],
+    String? sourceUrl,
+  }) async {
+    final stored = await FileStorage.writeBytes(
+      bytes: bytes,
+      topicId: topic.id,
+      fileName: fileName,
+      mimeType: mimeType,
+    );
+    return _putItem(
+      topic: topic,
+      type: type,
+      fileRelPath: stored.relativePath,
+      fileName: stored.fileName,
+      mimeType: stored.mimeType,
+      fileSize: stored.fileSize,
+      note: note,
+      tags: tags,
+      sourceUrl: sourceUrl,
+    );
+  }
+
   Future<Item> _putItem({
     required Topic topic,
     required ItemType type,
