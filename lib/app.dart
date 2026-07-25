@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'features/capture/share_intent_listener.dart';
 import 'features/home/home_shell.dart';
 import 'providers/isar_provider.dart';
 import 'theme/cortex_colors.dart';
 import 'theme/cortex_theme.dart';
+
+final cortexNavigatorKey = GlobalKey<NavigatorState>();
 
 class CortexApp extends ConsumerWidget {
   const CortexApp({super.key});
@@ -13,14 +16,18 @@ class CortexApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isar = ref.watch(isarProvider);
 
-    return MaterialApp(
-      title: 'CORTEX',
-      debugShowCheckedModeBanner: false,
-      theme: CortexTheme.dark(),
-      home: isar.when(
-        loading: () => const _BootScreen(),
-        error: (e, _) => _BootScreen(error: '$e'),
-        data: (_) => const HomeShell(),
+    return ShareIntentListener(
+      navigatorKey: cortexNavigatorKey,
+      child: MaterialApp(
+        title: 'CORTEX',
+        debugShowCheckedModeBanner: false,
+        theme: CortexTheme.dark(),
+        navigatorKey: cortexNavigatorKey,
+        home: isar.when(
+          loading: () => const _BootScreen(),
+          error: (e, _) => _BootScreen(error: '$e'),
+          data: (_) => const HomeShell(),
+        ),
       ),
     );
   }
