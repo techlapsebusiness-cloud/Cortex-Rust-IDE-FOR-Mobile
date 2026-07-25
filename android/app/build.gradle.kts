@@ -7,7 +7,8 @@ plugins {
 
 android {
     namespace = "dev.crore.cortex"
-    compileSdk = flutter.compileSdkVersion
+    // receive_sharing_intent requires compileSdk 37+; Flutter default is currently 36.
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
