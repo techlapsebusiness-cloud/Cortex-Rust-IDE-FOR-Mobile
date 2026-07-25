@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/enrichment/link_preview_service.dart';
 import '../../../data/file_storage.dart';
 import '../../../data/models/item.dart';
 import '../../../data/models/item_type.dart';
@@ -138,55 +139,114 @@ class _LinkBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pending = item.previewTitle == item.sourceUrl &&
+        item.previewImageUrl == null;
     final title = item.previewTitle ?? item.sourceUrl ?? 'Link';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            color: CortexColors.elevated,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: CortexColors.hairline),
-          ),
-          child: item.previewImageUrl != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    item.previewImageUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => const Icon(
-                      Icons.link,
-                      color: CortexColors.accent,
-                    ),
-                  ),
-                )
-              : const Icon(Icons.link, color: CortexColors.accent),
-        ),
+        _PreviewThumb(imageRef: item.previewImageUrl, pending: pending),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: CortexTheme.body(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+              if (pending)
+                Container(
+                  height: 14,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: CortexColors.elevated,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                )
+              else
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: CortexTheme.body(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
               const SizedBox(height: 6),
               Text(
                 domainOf(item.sourceUrl),
                 style: CortexTheme.mono(fontSize: 11),
               ),
+              if (item.previewDescription != null &&
+                  item.previewDescription!.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  item.previewDescription!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: CortexTheme.body(
+                    fontSize: 12,
+                    color: CortexColors.muted,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _PreviewThumb extends StatelessWidget {
+  const _PreviewThumb({required this.imageRef, required this.pending});
+
+  final String? imageRef;
+  final bool pending;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 56,
+      height: 56,
+      decoration: BoxDecoration(
+        color: CortexColors.elevated,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: CortexColors.hairline),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: pending
+          ? const Center(
+              child: SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: CortexColors.accent,
+                ),
+              ),
+            )
+          : imageRef == null
+              ? const Icon(Icons.link, color: CortexColors.accent)
+              : LinkPreviewService.isCachedLocalPath(imageRef)
+                  ? FutureBuilder<String>(
+                      future: FileStorage.absoluteFromRelative(imageRef!),
+                      builder: (context, snap) {
+                        if (!snap.hasData) {
+                          return const Icon(Icons.link, color: CortexColors.accent);
+                        }
+                        return Image.file(
+                          File(snap.data!),
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.link, color: CortexColors.accent),
+                        );
+                      },
+                    )
+                  : Image.network(
+                      imageRef!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.link, color: CortexColors.accent),
+                    ),
     );
   }
 }
@@ -243,14 +303,43 @@ class _VideoBody extends ConsumerWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Container(
-              color: CortexColors.elevated,
-              child: const Icon(
-                Icons.videocam_outlined,
-                color: CortexColors.muted,
-                size: 36,
+            if (item.thumbRelPath != null)
+              FutureBuilder<String>(
+                future: FileStorage.absoluteFromRelative(item.thumbRelPath!),
+                builder: (context, snap) {
+                  if (!snap.hasData) {
+                    return Container(
+                      color: CortexColors.elevated,
+                      child: const Icon(
+                        Icons.videocam_outlined,
+                        color: CortexColors.muted,
+                        size: 36,
+                      ),
+                    );
+                  }
+                  return Image.file(
+                    File(snap.data!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: CortexColors.elevated,
+                      child: const Icon(
+                        Icons.videocam_outlined,
+                        color: CortexColors.muted,
+                        size: 36,
+                      ),
+                    ),
+                  );
+                },
+              )
+            else
+              Container(
+                color: CortexColors.elevated,
+                child: const Icon(
+                  Icons.videocam_outlined,
+                  color: CortexColors.muted,
+                  size: 36,
+                ),
               ),
-            ),
             Center(
               child: Container(
                 width: 48,

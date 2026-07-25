@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Link preview OG fetch (Phase 5). No broad storage permissions. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="CORTEX"
         android:name="${applicationName}"

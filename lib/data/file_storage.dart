@@ -70,11 +70,28 @@ class FileStorage {
 
   static Future<void> deleteRelative(String? relPath) async {
     if (relPath == null || relPath.isEmpty) return;
-    final abs = await absoluteFromRelative(relPath);
+    // Only delete paths inside our cortex/ tree (never absolute or odd paths).
+    final normalized = relPath.replaceAll('\\', '/');
+    if (!normalized.startsWith('cortex/')) return;
+    final abs = await absoluteFromRelative(normalized);
     final file = File(abs);
     if (await file.exists()) {
       await file.delete();
     }
+  }
+
+  /// Bytes used by `cortex/` under the app documents directory.
+  static Future<int> cortexStorageBytes() async {
+    final docs = await docsDir();
+    final root = Directory(p.join(docs.path, 'cortex'));
+    if (!await root.exists()) return 0;
+    var total = 0;
+    await for (final entity in root.list(recursive: true, followLinks: false)) {
+      if (entity is File) {
+        total += await entity.length();
+      }
+    }
+    return total;
   }
 
   static String _extensionOf(String path, String? preferredName) {

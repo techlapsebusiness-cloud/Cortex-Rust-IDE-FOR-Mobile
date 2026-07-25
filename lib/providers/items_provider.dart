@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 
+import '../data/enrichment/link_preview_service.dart';
+import '../data/enrichment/video_thumb_service.dart';
 import '../data/file_storage.dart';
 import '../data/models/item.dart';
 import '../data/models/item_type.dart';
@@ -99,9 +102,9 @@ class ItemsRepository {
     required String url,
     String? note,
     List<String> tags = const [],
-  }) {
+  }) async {
     final cleaned = url.trim();
-    return _putItem(
+    final item = await _putItem(
       topic: topic,
       type: ItemType.link,
       sourceUrl: cleaned,
@@ -109,6 +112,9 @@ class ItemsRepository {
       note: note,
       tags: tags,
     );
+    // Non-blocking: skeleton card shows until cache lands (§11).
+    unawaited(LinkPreviewService.enrich(item, _isar));
+    return item;
   }
 
   Future<Item> addFileFromPath({
@@ -127,7 +133,7 @@ class ItemsRepository {
       preferredName: fileName,
       mimeType: mimeType,
     );
-    return _putItem(
+    final item = await _putItem(
       topic: topic,
       type: type,
       fileRelPath: stored.relativePath,
@@ -138,6 +144,10 @@ class ItemsRepository {
       tags: tags,
       sourceUrl: sourceUrl,
     );
+    if (type == ItemType.video) {
+      unawaited(VideoThumbService.generate(item, _isar));
+    }
+    return item;
   }
 
   Future<Item> addFileFromBytes({
@@ -156,7 +166,7 @@ class ItemsRepository {
       fileName: fileName,
       mimeType: mimeType,
     );
-    return _putItem(
+    final item = await _putItem(
       topic: topic,
       type: type,
       fileRelPath: stored.relativePath,
@@ -167,6 +177,10 @@ class ItemsRepository {
       tags: tags,
       sourceUrl: sourceUrl,
     );
+    if (type == ItemType.video) {
+      unawaited(VideoThumbService.generate(item, _isar));
+    }
+    return item;
   }
 
   Future<Item> _putItem({
@@ -273,6 +287,10 @@ class ItemsRepository {
 
   Future<void> delete(Item item) async {
     await FileStorage.deleteRelative(item.fileRelPath);
+    await FileStorage.deleteRelative(item.thumbRelPath);
+    if (LinkPreviewService.isCachedLocalPath(item.previewImageUrl)) {
+      await FileStorage.deleteRelative(item.previewImageUrl);
+    }
     await item.topic.load();
     final topic = item.topic.value;
     await _isar.writeTxn(() async {

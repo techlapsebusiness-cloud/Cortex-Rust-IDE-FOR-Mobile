@@ -71,8 +71,13 @@ const ItemSchema = CollectionSchema(
     ),
     r'tags': PropertySchema(id: 12, name: r'tags', type: IsarType.stringList),
     r'text': PropertySchema(id: 13, name: r'text', type: IsarType.string),
-    r'type': PropertySchema(
+    r'thumbRelPath': PropertySchema(
       id: 14,
+      name: r'thumbRelPath',
+      type: IsarType.string,
+    ),
+    r'type': PropertySchema(
+      id: 15,
       name: r'type',
       type: IsarType.byte,
       enumMap: _ItemtypeEnumValueMap,
@@ -183,6 +188,12 @@ int _itemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.thumbRelPath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -206,7 +217,8 @@ void _itemSerialize(
   writer.writeString(offsets[11], object.sourceUrl);
   writer.writeStringList(offsets[12], object.tags);
   writer.writeString(offsets[13], object.text);
-  writer.writeByte(offsets[14], object.type.index);
+  writer.writeString(offsets[14], object.thumbRelPath);
+  writer.writeByte(offsets[15], object.type.index);
 }
 
 Item _itemDeserialize(
@@ -231,8 +243,9 @@ Item _itemDeserialize(
   object.sourceUrl = reader.readStringOrNull(offsets[11]);
   object.tags = reader.readStringList(offsets[12]) ?? [];
   object.text = reader.readStringOrNull(offsets[13]);
+  object.thumbRelPath = reader.readStringOrNull(offsets[14]);
   object.type =
-      _ItemtypeValueEnumMap[reader.readByteOrNull(offsets[14])] ??
+      _ItemtypeValueEnumMap[reader.readByteOrNull(offsets[15])] ??
       ItemType.text;
   return object;
 }
@@ -273,6 +286,8 @@ P _itemDeserializeProp<P>(
     case 13:
       return (reader.readStringOrNull(offset)) as P;
     case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
       return (_ItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
               ItemType.text)
           as P;
@@ -2604,6 +2619,168 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'thumbRelPath'),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'thumbRelPath'),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'thumbRelPath',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathContains(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'thumbRelPath',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathMatches(
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'thumbRelPath',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'thumbRelPath', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'thumbRelPath', value: ''),
+      );
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterFilterCondition> typeEqualTo(ItemType value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -2835,6 +3012,18 @@ extension ItemQuerySortBy on QueryBuilder<Item, Item, QSortBy> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterSortBy> sortByThumbRelPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbRelPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> sortByThumbRelPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbRelPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterSortBy> sortByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
@@ -3017,6 +3206,18 @@ extension ItemQuerySortThenBy on QueryBuilder<Item, Item, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Item, Item, QAfterSortBy> thenByThumbRelPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbRelPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Item, Item, QAfterSortBy> thenByThumbRelPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbRelPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<Item, Item, QAfterSortBy> thenByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
@@ -3141,6 +3342,14 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
+  QueryBuilder<Item, Item, QDistinct> distinctByThumbRelPath({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'thumbRelPath', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Item, Item, QDistinct> distinctByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'type');
@@ -3236,6 +3445,12 @@ extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
   QueryBuilder<Item, String?, QQueryOperations> textProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'text');
+    });
+  }
+
+  QueryBuilder<Item, String?, QQueryOperations> thumbRelPathProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'thumbRelPath');
     });
   }
 

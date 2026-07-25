@@ -26,7 +26,12 @@ class Item {
 
   String? previewTitle;
   String? previewDescription;
+
+  /// Remote URL or local relative path (under docs) for offline cards.
   String? previewImageUrl;
+
+  /// Local relative path to a generated video thumbnail.
+  String? thumbRelPath;
 
   List<String> tags = [];
 
