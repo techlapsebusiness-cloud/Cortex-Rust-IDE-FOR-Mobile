@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:isar_community/isar.dart';
 
-import '../data/models/item.dart';
-import '../data/models/item_type.dart';
-import '../data/models/topic.dart';
+import '../data/models/project.dart';
+import '../data/models/research_enums.dart';
+import '../data/models/research_item.dart';
 import 'isar_provider.dart';
 import 'items_provider.dart';
-import 'topics_provider.dart';
+import 'projects_provider.dart';
 
 final globalSearchQueryProvider = StateProvider<String>((ref) => '');
 final globalSearchTypeProvider =
@@ -14,28 +14,28 @@ final globalSearchTypeProvider =
 final globalSearchTagProvider = StateProvider<String?>((ref) => null);
 
 class SearchHit {
-  const SearchHit({required this.item, required this.topic});
+  const SearchHit({required this.item, required this.project});
 
-  final Item item;
-  final Topic topic;
+  final ResearchItem item;
+  final Project project;
 }
 
 class SearchResults {
   const SearchResults({
-    required this.topicHits,
+    required this.projectHits,
     required this.groupedItems,
   });
 
-  final List<Topic> topicHits;
+  final List<Project> projectHits;
 
-  /// Items grouped by topic title, newest first within each group.
-  final Map<Topic, List<Item>> groupedItems;
+  /// Items grouped by project, newest first within each group.
+  final Map<Project, List<ResearchItem>> groupedItems;
 }
 
-final tagsIndexProvider = StreamProvider<List<String>>((ref) async* {
-  final isar = await ref.watch(isarProvider.future);
-  yield* isar.items.watchLazy(fireImmediately: true).asyncMap((_) async {
-    final items = await isar.items.where().anyId().findAll();
+final tagsIndexProvider = StreamProvider<List<String>>((ref) {
+  final isar = ref.watch(isarProvider);
+  return isar.researchItems.watchLazy(fireImmediately: true).asyncMap((_) async {
+    final items = await isar.researchItems.where().anyId().findAll();
     final tags = <String>{};
     for (final i in items) {
       tags.addAll(i.tags.map((t) => t.toLowerCase()));
@@ -49,25 +49,42 @@ final globalSearchProvider = FutureProvider<SearchResults>((ref) async {
   final query = ref.watch(globalSearchQueryProvider).trim().toLowerCase();
   final typeFilter = ref.watch(globalSearchTypeProvider);
   final tagFilter = ref.watch(globalSearchTagProvider)?.toLowerCase();
-  final topics = await ref.watch(topicsProvider.future);
-  final isar = await ref.watch(isarProvider.future);
+  final projects = ref.watch(projectsProvider).valueOrNull ?? [];
+  final isar = ref.watch(isarProvider);
 
   final emptyQuery = query.isEmpty;
   final emptyTag = tagFilter == null || tagFilter.isEmpty;
   if (emptyQuery && emptyTag && typeFilter == FeedFilter.all) {
-    return const SearchResults(topicHits: [], groupedItems: {});
+    return const SearchResults(projectHits: [], groupedItems: {});
   }
 
-  final topicHits = emptyQuery
-      ? <Topic>[]
-      : topics.where((t) => t.searchText.contains(query)).toList();
+  final projectHits = emptyQuery
+      ? <Project>[]
+      : projects.where((p) {
+          final blob = [
+            p.title,
+            p.researchQuestion,
+            p.field ?? '',
+            p.description ?? '',
+          ].join(' ').toLowerCase();
+          return blob.contains(query);
+        }).toList();
 
-  final allItems = await isar.items.where().anyId().findAll();
-  final matched = <Item>[];
+  final allItems = await isar.researchItems.where().anyId().findAll();
+  final matched = <ResearchItem>[];
   for (final item in allItems) {
-    if (!emptyQuery && !item.searchText.contains(query)) continue;
-    if (!emptyTag &&
-        !item.tags.any((t) => t.toLowerCase() == tagFilter)) {
+    final blob = [
+      item.text ?? '',
+      item.note ?? '',
+      item.previewTitle ?? '',
+      item.previewDescription ?? '',
+      item.fileName ?? '',
+      item.sourceUrl ?? '',
+      item.citation ?? '',
+      ...item.tags,
+    ].join(' ').toLowerCase();
+    if (!emptyQuery && !blob.contains(query)) continue;
+    if (!emptyTag && !item.tags.any((t) => t.toLowerCase() == tagFilter)) {
       continue;
     }
     final typeOk = switch (typeFilter) {
@@ -84,13 +101,13 @@ final globalSearchProvider = FutureProvider<SearchResults>((ref) async {
 
   matched.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-  final grouped = <Topic, List<Item>>{};
+  final grouped = <Project, List<ResearchItem>>{};
   for (final item in matched) {
-    await item.topic.load();
-    final topic = item.topic.value;
-    if (topic == null) continue;
-    grouped.putIfAbsent(topic, () => []).add(item);
+    await item.project.load();
+    final project = item.project.value;
+    if (project == null) continue;
+    grouped.putIfAbsent(project, () => []).add(item);
   }
 
-  return SearchResults(topicHits: topicHits, groupedItems: grouped);
+  return SearchResults(projectHits: projectHits, groupedItems: grouped);
 });

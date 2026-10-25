@@ -1,6 +1,6 @@
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-import '../data/models/item_type.dart';
+import '../data/models/research_enums.dart';
 import '../providers/items_provider.dart';
 
 /// Normalized share / drop payload ready for CaptureSheet or quick-add.
@@ -22,7 +22,7 @@ class CapturePayload {
   final String? fileName;
   final String? mimeType;
 
-  /// In-memory bytes from drag formats (png/jpeg/webp).
+  /// In-memory bytes from drag formats (png/jpeg/webp/gif).
   final List<int>? bytes;
 
   String get previewLabel {

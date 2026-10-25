@@ -6,11 +6,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/file_storage.dart';
-import '../../data/models/item.dart';
-import '../../data/models/item_type.dart';
-import '../../data/models/topic.dart';
+import '../../data/models/project.dart';
+import '../../data/models/research_enums.dart';
+import '../../data/models/research_item.dart';
 import '../../providers/items_provider.dart';
-import '../../providers/topics_provider.dart';
+import '../../providers/projects_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
 import '../../utils/format.dart';
@@ -47,7 +47,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     super.dispose();
   }
 
-  void _hydrate(Item item) {
+  void _hydrate(ResearchItem item) {
     if (_hydrated) return;
     _note.text = item.note ?? '';
     _tags.text = item.tags.join(', ');
@@ -102,9 +102,8 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     );
   }
 
-  Future<void> _save(Item item) async {
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+  Future<void> _save(ResearchItem item) async {
+    final repo = ref.read(itemsRepositoryProvider);
     await repo.updateMeta(
       item,
       note: _note.text,
@@ -123,7 +122,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     );
   }
 
-  Future<void> _delete(Item item) async {
+  Future<void> _delete(ResearchItem item) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -148,19 +147,18 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
       ),
     );
     if (ok != true) return;
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+    final repo = ref.read(itemsRepositoryProvider);
     await repo.delete(item);
     if (!mounted) return;
     Navigator.of(context).pop();
   }
 
-  Future<void> _move(Item item) async {
-    final topics = ref.read(topicsProvider).valueOrNull ?? [];
-    await item.topic.load();
+  Future<void> _move(ResearchItem item) async {
+    final projects = ref.read(projectsProvider).valueOrNull ?? [];
+    await item.project.load();
     if (!mounted) return;
-    final currentId = item.topic.value?.id;
-    final chosen = await showModalBottomSheet<Topic>(
+    final currentId = item.project.value?.id;
+    final chosen = await showModalBottomSheet<Project>(
       context: context,
       backgroundColor: CortexColors.elevated,
       shape: const RoundedRectangleBorder(
@@ -174,30 +172,29 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                'MOVE TO TOPIC',
+                'MOVE TO PROJECT',
                 style: CortexTheme.orbitron(
                   fontSize: 13,
                   color: CortexColors.accent,
                 ),
               ),
             ),
-            for (final t in topics)
+            for (final p in projects)
               ListTile(
-                enabled: t.id != currentId,
-                title: Text(t.title, style: CortexTheme.body()),
-                trailing: t.id == currentId
+                enabled: p.id != currentId,
+                title: Text(p.title, style: CortexTheme.body()),
+                trailing: p.id == currentId
                     ? Text('CURRENT', style: CortexTheme.mono(fontSize: 10))
                     : null,
-                onTap: () => Navigator.pop(ctx, t),
+                onTap: () => Navigator.pop(ctx, p),
               ),
           ],
         ),
       ),
     );
     if (chosen == null) return;
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
-    await repo.moveToTopic(item, chosen);
+    final repo = ref.read(itemsRepositoryProvider);
+    await repo.moveToProject(item, chosen);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -209,7 +206,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     );
   }
 
-  Future<void> _share(Item item) async {
+  Future<void> _share(ResearchItem item) async {
     if (item.fileRelPath != null) {
       final abs = await FileStorage.absoluteFromRelative(item.fileRelPath!);
       await SharePlus.instance.share(
@@ -227,7 +224,7 @@ class _ItemDetailPageState extends ConsumerState<ItemDetailPage> {
     await SharePlus.instance.share(ShareParams(text: buffer.toString().trim()));
   }
 
-  Future<void> _openSource(Item item) async {
+  Future<void> _openSource(ResearchItem item) async {
     final url = item.sourceUrl;
     if (url == null || url.isEmpty) return;
     final uri = Uri.tryParse(url);
@@ -259,7 +256,7 @@ class _DetailScaffold extends StatelessWidget {
     required this.onOpenSource,
   });
 
-  final Item item;
+  final ResearchItem item;
   final TextEditingController note;
   final TextEditingController tags;
   final TextEditingController text;
@@ -298,7 +295,7 @@ class _DetailScaffold extends StatelessWidget {
             itemBuilder: (_) => [
               PopupMenuItem(
                 value: 'move',
-                child: Text('Move to topic', style: CortexTheme.body()),
+                child: Text('Move to project', style: CortexTheme.body()),
               ),
               PopupMenuItem(
                 value: 'delete',
@@ -398,7 +395,7 @@ class _DetailScaffold extends StatelessWidget {
 class _MediaPreview extends StatelessWidget {
   const _MediaPreview({required this.item});
 
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item.dart';
+part of 'research_item.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,95 +9,108 @@ part of 'item.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetItemCollection on Isar {
-  IsarCollection<Item> get items => this.collection();
+extension GetResearchItemCollection on Isar {
+  IsarCollection<ResearchItem> get researchItems => this.collection();
 }
 
-const ItemSchema = CollectionSchema(
-  name: r'Item',
-  id: 7900997316587104717,
+const ResearchItemSchema = CollectionSchema(
+  name: r'ResearchItem',
+  id: -8484477884049928559,
   properties: {
-    r'createdAt': PropertySchema(
+    r'citation': PropertySchema(
       id: 0,
+      name: r'citation',
+      type: IsarType.string,
+    ),
+    r'createdAt': PropertySchema(
+      id: 1,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
+    r'credibility': PropertySchema(
+      id: 2,
+      name: r'credibility',
+      type: IsarType.byte,
+      enumMap: _ResearchItemcredibilityEnumValueMap,
+    ),
     r'fileName': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'fileName',
       type: IsarType.string,
     ),
     r'fileRelPath': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'fileRelPath',
       type: IsarType.string,
     ),
-    r'fileSize': PropertySchema(id: 3, name: r'fileSize', type: IsarType.long),
+    r'fileSize': PropertySchema(id: 5, name: r'fileSize', type: IsarType.long),
     r'mimeType': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'mimeType',
       type: IsarType.string,
     ),
-    r'note': PropertySchema(id: 5, name: r'note', type: IsarType.string),
+    r'note': PropertySchema(id: 7, name: r'note', type: IsarType.string),
     r'previewDescription': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'previewDescription',
       type: IsarType.string,
     ),
     r'previewImageUrl': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'previewImageUrl',
       type: IsarType.string,
     ),
     r'previewTitle': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'previewTitle',
       type: IsarType.string,
     ),
-    r'searchText': PropertySchema(
-      id: 9,
-      name: r'searchText',
-      type: IsarType.string,
-    ),
     r'sortIndex': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'sortIndex',
       type: IsarType.long,
     ),
     r'sourceUrl': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'sourceUrl',
       type: IsarType.string,
     ),
-    r'tags': PropertySchema(id: 12, name: r'tags', type: IsarType.stringList),
-    r'text': PropertySchema(id: 13, name: r'text', type: IsarType.string),
-    r'thumbRelPath': PropertySchema(
-      id: 14,
-      name: r'thumbRelPath',
-      type: IsarType.string,
+    r'stage': PropertySchema(
+      id: 13,
+      name: r'stage',
+      type: IsarType.byte,
+      enumMap: _ResearchItemstageEnumValueMap,
     ),
+    r'stance': PropertySchema(
+      id: 14,
+      name: r'stance',
+      type: IsarType.byte,
+      enumMap: _ResearchItemstanceEnumValueMap,
+    ),
+    r'tags': PropertySchema(id: 15, name: r'tags', type: IsarType.stringList),
+    r'text': PropertySchema(id: 16, name: r'text', type: IsarType.string),
     r'type': PropertySchema(
-      id: 15,
+      id: 17,
       name: r'type',
       type: IsarType.byte,
-      enumMap: _ItemtypeEnumValueMap,
+      enumMap: _ResearchItemtypeEnumValueMap,
     ),
   },
 
-  estimateSize: _itemEstimateSize,
-  serialize: _itemSerialize,
-  deserialize: _itemDeserialize,
-  deserializeProp: _itemDeserializeProp,
+  estimateSize: _researchItemEstimateSize,
+  serialize: _researchItemSerialize,
+  deserialize: _researchItemDeserialize,
+  deserializeProp: _researchItemDeserializeProp,
   idName: r'id',
   indexes: {
-    r'searchText': IndexSchema(
-      id: -8276020959797920665,
-      name: r'searchText',
+    r'stage': IndexSchema(
+      id: 4281597865616208537,
+      name: r'stage',
       unique: false,
       replace: false,
       properties: [
         IndexPropertySchema(
-          name: r'searchText',
+          name: r'stage',
           type: IndexType.value,
           caseSensitive: false,
         ),
@@ -105,27 +118,39 @@ const ItemSchema = CollectionSchema(
     ),
   },
   links: {
-    r'topic': LinkSchema(
-      id: -4960566567913786188,
-      name: r'topic',
-      target: r'Topic',
+    r'project': LinkSchema(
+      id: -3675077521159351622,
+      name: r'project',
+      target: r'Project',
+      single: true,
+    ),
+    r'claim': LinkSchema(
+      id: -1114638231943054340,
+      name: r'claim',
+      target: r'Claim',
       single: true,
     ),
   },
   embeddedSchemas: {},
 
-  getId: _itemGetId,
-  getLinks: _itemGetLinks,
-  attach: _itemAttach,
+  getId: _researchItemGetId,
+  getLinks: _researchItemGetLinks,
+  attach: _researchItemAttach,
   version: '3.3.2',
 );
 
-int _itemEstimateSize(
-  Item object,
+int _researchItemEstimateSize(
+  ResearchItem object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.citation;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.fileName;
     if (value != null) {
@@ -168,7 +193,6 @@ int _itemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.searchText.length * 3;
   {
     final value = object.sourceUrl;
     if (value != null) {
@@ -188,69 +212,73 @@ int _itemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  {
-    final value = object.thumbRelPath;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   return bytesCount;
 }
 
-void _itemSerialize(
-  Item object,
+void _researchItemSerialize(
+  ResearchItem object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeString(offsets[1], object.fileName);
-  writer.writeString(offsets[2], object.fileRelPath);
-  writer.writeLong(offsets[3], object.fileSize);
-  writer.writeString(offsets[4], object.mimeType);
-  writer.writeString(offsets[5], object.note);
-  writer.writeString(offsets[6], object.previewDescription);
-  writer.writeString(offsets[7], object.previewImageUrl);
-  writer.writeString(offsets[8], object.previewTitle);
-  writer.writeString(offsets[9], object.searchText);
-  writer.writeLong(offsets[10], object.sortIndex);
-  writer.writeString(offsets[11], object.sourceUrl);
-  writer.writeStringList(offsets[12], object.tags);
-  writer.writeString(offsets[13], object.text);
-  writer.writeString(offsets[14], object.thumbRelPath);
-  writer.writeByte(offsets[15], object.type.index);
+  writer.writeString(offsets[0], object.citation);
+  writer.writeDateTime(offsets[1], object.createdAt);
+  writer.writeByte(offsets[2], object.credibility.index);
+  writer.writeString(offsets[3], object.fileName);
+  writer.writeString(offsets[4], object.fileRelPath);
+  writer.writeLong(offsets[5], object.fileSize);
+  writer.writeString(offsets[6], object.mimeType);
+  writer.writeString(offsets[7], object.note);
+  writer.writeString(offsets[8], object.previewDescription);
+  writer.writeString(offsets[9], object.previewImageUrl);
+  writer.writeString(offsets[10], object.previewTitle);
+  writer.writeLong(offsets[11], object.sortIndex);
+  writer.writeString(offsets[12], object.sourceUrl);
+  writer.writeByte(offsets[13], object.stage.index);
+  writer.writeByte(offsets[14], object.stance.index);
+  writer.writeStringList(offsets[15], object.tags);
+  writer.writeString(offsets[16], object.text);
+  writer.writeByte(offsets[17], object.type.index);
 }
 
-Item _itemDeserialize(
+ResearchItem _researchItemDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Item();
-  object.createdAt = reader.readDateTime(offsets[0]);
-  object.fileName = reader.readStringOrNull(offsets[1]);
-  object.fileRelPath = reader.readStringOrNull(offsets[2]);
-  object.fileSize = reader.readLongOrNull(offsets[3]);
+  final object = ResearchItem();
+  object.citation = reader.readStringOrNull(offsets[0]);
+  object.createdAt = reader.readDateTime(offsets[1]);
+  object.credibility =
+      _ResearchItemcredibilityValueEnumMap[reader.readByteOrNull(offsets[2])] ??
+      Credibility.high;
+  object.fileName = reader.readStringOrNull(offsets[3]);
+  object.fileRelPath = reader.readStringOrNull(offsets[4]);
+  object.fileSize = reader.readLongOrNull(offsets[5]);
   object.id = id;
-  object.mimeType = reader.readStringOrNull(offsets[4]);
-  object.note = reader.readStringOrNull(offsets[5]);
-  object.previewDescription = reader.readStringOrNull(offsets[6]);
-  object.previewImageUrl = reader.readStringOrNull(offsets[7]);
-  object.previewTitle = reader.readStringOrNull(offsets[8]);
-  object.searchText = reader.readString(offsets[9]);
-  object.sortIndex = reader.readLong(offsets[10]);
-  object.sourceUrl = reader.readStringOrNull(offsets[11]);
-  object.tags = reader.readStringList(offsets[12]) ?? [];
-  object.text = reader.readStringOrNull(offsets[13]);
-  object.thumbRelPath = reader.readStringOrNull(offsets[14]);
+  object.mimeType = reader.readStringOrNull(offsets[6]);
+  object.note = reader.readStringOrNull(offsets[7]);
+  object.previewDescription = reader.readStringOrNull(offsets[8]);
+  object.previewImageUrl = reader.readStringOrNull(offsets[9]);
+  object.previewTitle = reader.readStringOrNull(offsets[10]);
+  object.sortIndex = reader.readLong(offsets[11]);
+  object.sourceUrl = reader.readStringOrNull(offsets[12]);
+  object.stage =
+      _ResearchItemstageValueEnumMap[reader.readByteOrNull(offsets[13])] ??
+      ResearchStage.question;
+  object.stance =
+      _ResearchItemstanceValueEnumMap[reader.readByteOrNull(offsets[14])] ??
+      Stance.supports;
+  object.tags = reader.readStringList(offsets[15]) ?? [];
+  object.text = reader.readStringOrNull(offsets[16]);
   object.type =
-      _ItemtypeValueEnumMap[reader.readByteOrNull(offsets[15])] ??
+      _ResearchItemtypeValueEnumMap[reader.readByteOrNull(offsets[17])] ??
       ItemType.text;
   return object;
 }
 
-P _itemDeserializeProp<P>(
+P _researchItemDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -258,17 +286,21 @@ P _itemDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (_ResearchItemcredibilityValueEnumMap[reader.readByteOrNull(
+                offset,
+              )] ??
+              Credibility.high)
+          as P;
     case 3:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
@@ -276,19 +308,27 @@ P _itemDeserializeProp<P>(
     case 8:
       return (reader.readStringOrNull(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 12:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 13:
-      return (reader.readStringOrNull(offset)) as P;
+      return (_ResearchItemstageValueEnumMap[reader.readByteOrNull(offset)] ??
+              ResearchStage.question)
+          as P;
     case 14:
-      return (reader.readStringOrNull(offset)) as P;
+      return (_ResearchItemstanceValueEnumMap[reader.readByteOrNull(offset)] ??
+              Stance.supports)
+          as P;
     case 15:
-      return (_ItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
+      return (reader.readStringList(offset) ?? []) as P;
+    case 16:
+      return (reader.readStringOrNull(offset)) as P;
+    case 17:
+      return (_ResearchItemtypeValueEnumMap[reader.readByteOrNull(offset)] ??
               ItemType.text)
           as P;
     default:
@@ -296,14 +336,58 @@ P _itemDeserializeProp<P>(
   }
 }
 
-const _ItemtypeEnumValueMap = {
+const _ResearchItemcredibilityEnumValueMap = {
+  'high': 0,
+  'medium': 1,
+  'low': 2,
+  'unknown': 3,
+};
+const _ResearchItemcredibilityValueEnumMap = {
+  0: Credibility.high,
+  1: Credibility.medium,
+  2: Credibility.low,
+  3: Credibility.unknown,
+};
+const _ResearchItemstageEnumValueMap = {
+  'question': 0,
+  'background': 1,
+  'hypothesis': 2,
+  'method': 3,
+  'evidence': 4,
+  'analysis': 5,
+  'conclusion': 6,
+  'openQuestion': 7,
+  'reference': 8,
+};
+const _ResearchItemstageValueEnumMap = {
+  0: ResearchStage.question,
+  1: ResearchStage.background,
+  2: ResearchStage.hypothesis,
+  3: ResearchStage.method,
+  4: ResearchStage.evidence,
+  5: ResearchStage.analysis,
+  6: ResearchStage.conclusion,
+  7: ResearchStage.openQuestion,
+  8: ResearchStage.reference,
+};
+const _ResearchItemstanceEnumValueMap = {
+  'supports': 0,
+  'refutes': 1,
+  'neutral': 2,
+};
+const _ResearchItemstanceValueEnumMap = {
+  0: Stance.supports,
+  1: Stance.refutes,
+  2: Stance.neutral,
+};
+const _ResearchItemtypeEnumValueMap = {
   'text': 0,
   'link': 1,
   'image': 2,
   'video': 3,
   'file': 4,
 };
-const _ItemtypeValueEnumMap = {
+const _ResearchItemtypeValueEnumMap = {
   0: ItemType.text,
   1: ItemType.link,
   2: ItemType.image,
@@ -311,43 +395,52 @@ const _ItemtypeValueEnumMap = {
   4: ItemType.file,
 };
 
-Id _itemGetId(Item object) {
+Id _researchItemGetId(ResearchItem object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _itemGetLinks(Item object) {
-  return [object.topic];
+List<IsarLinkBase<dynamic>> _researchItemGetLinks(ResearchItem object) {
+  return [object.project, object.claim];
 }
 
-void _itemAttach(IsarCollection<dynamic> col, Id id, Item object) {
+void _researchItemAttach(
+  IsarCollection<dynamic> col,
+  Id id,
+  ResearchItem object,
+) {
   object.id = id;
-  object.topic.attach(col, col.isar.collection<Topic>(), r'topic', id);
+  object.project.attach(col, col.isar.collection<Project>(), r'project', id);
+  object.claim.attach(col, col.isar.collection<Claim>(), r'claim', id);
 }
 
-extension ItemQueryWhereSort on QueryBuilder<Item, Item, QWhere> {
-  QueryBuilder<Item, Item, QAfterWhere> anyId() {
+extension ResearchItemQueryWhereSort
+    on QueryBuilder<ResearchItem, ResearchItem, QWhere> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhere> anySearchText() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhere> anyStage() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'searchText'),
+        const IndexWhereClause.any(indexName: r'stage'),
       );
     });
   }
 }
 
-extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
-  QueryBuilder<Item, Item, QAfterWhereClause> idEqualTo(Id id) {
+extension ResearchItemQueryWhere
+    on QueryBuilder<ResearchItem, ResearchItem, QWhereClause> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> idNotEqualTo(
+    Id id,
+  ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -369,7 +462,7 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> idGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> idGreaterThan(
     Id id, {
     bool include = false,
   }) {
@@ -380,7 +473,7 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> idLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> idLessThan(
     Id id, {
     bool include = false,
   }) {
@@ -391,7 +484,7 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> idBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -409,34 +502,34 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextEqualTo(
-    String searchText,
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> stageEqualTo(
+    ResearchStage stage,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'searchText', value: [searchText]),
+        IndexWhereClause.equalTo(indexName: r'stage', value: [stage]),
       );
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextNotEqualTo(
-    String searchText,
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> stageNotEqualTo(
+    ResearchStage stage,
   ) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(
               IndexWhereClause.between(
-                indexName: r'searchText',
+                indexName: r'stage',
                 lower: [],
-                upper: [searchText],
+                upper: [stage],
                 includeUpper: false,
               ),
             )
             .addWhereClause(
               IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [searchText],
+                indexName: r'stage',
+                lower: [stage],
                 includeLower: false,
                 upper: [],
               ),
@@ -445,17 +538,17 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
         return query
             .addWhereClause(
               IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [searchText],
+                indexName: r'stage',
+                lower: [stage],
                 includeLower: false,
                 upper: [],
               ),
             )
             .addWhereClause(
               IndexWhereClause.between(
-                indexName: r'searchText',
+                indexName: r'stage',
                 lower: [],
-                upper: [searchText],
+                upper: [stage],
                 includeUpper: false,
               ),
             );
@@ -463,15 +556,15 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextGreaterThan(
-    String searchText, {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> stageGreaterThan(
+    ResearchStage stage, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [searchText],
+          indexName: r'stage',
+          lower: [stage],
           includeLower: include,
           upper: [],
         ),
@@ -479,96 +572,205 @@ extension ItemQueryWhere on QueryBuilder<Item, Item, QWhereClause> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextLessThan(
-    String searchText, {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> stageLessThan(
+    ResearchStage stage, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IndexWhereClause.between(
-          indexName: r'searchText',
+          indexName: r'stage',
           lower: [],
-          upper: [searchText],
+          upper: [stage],
           includeUpper: include,
         ),
       );
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextBetween(
-    String lowerSearchText,
-    String upperSearchText, {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterWhereClause> stageBetween(
+    ResearchStage lowerStage,
+    ResearchStage upperStage, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [lowerSearchText],
+          indexName: r'stage',
+          lower: [lowerStage],
           includeLower: includeLower,
-          upper: [upperSearchText],
+          upper: [upperStage],
           includeUpper: includeUpper,
         ),
       );
     });
   }
+}
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextStartsWith(
-    String SearchTextPrefix,
-  ) {
+extension ResearchItemQueryFilter
+    on QueryBuilder<ResearchItem, ResearchItem, QFilterCondition> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [SearchTextPrefix],
-          upper: ['$SearchTextPrefix\u{FFFFF}'],
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'citation'),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'citation'),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationEqualTo(String? value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
         ),
       );
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'searchText', value: ['']),
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
       );
     });
   }
 
-  QueryBuilder<Item, Item, QAfterWhereClause> searchTextIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'searchText', upper: ['']),
-            )
-            .addWhereClause(
-              IndexWhereClause.greaterThan(
-                indexName: r'searchText',
-                lower: [''],
-              ),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IndexWhereClause.greaterThan(
-                indexName: r'searchText',
-                lower: [''],
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'searchText', upper: ['']),
-            );
-      }
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
-}
 
-extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
-  QueryBuilder<Item, Item, QAfterFilterCondition> createdAtEqualTo(
-    DateTime value,
-  ) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'citation',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationEndsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'citation',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'citation',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'citation', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  citationIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'citation', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  createdAtEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'createdAt', value: value),
@@ -576,10 +778,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> createdAtGreaterThan(
-    DateTime value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  createdAtGreaterThan(DateTime value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
@@ -591,10 +791,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> createdAtLessThan(
-    DateTime value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  createdAtLessThan(DateTime value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.lessThan(
@@ -606,7 +804,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> createdAtBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  createdAtBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -625,7 +824,63 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  credibilityEqualTo(Credibility value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'credibility', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  credibilityGreaterThan(Credibility value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'credibility',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  credibilityLessThan(Credibility value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'credibility',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  credibilityBetween(
+    Credibility lower,
+    Credibility upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'credibility',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'fileName'),
@@ -633,7 +888,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'fileName'),
@@ -641,10 +897,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -656,7 +910,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -673,7 +928,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -690,7 +946,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -711,10 +968,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -726,10 +981,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -741,10 +994,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -756,10 +1007,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -771,7 +1020,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'fileName', value: ''),
@@ -779,7 +1029,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileNameIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileNameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'fileName', value: ''),
@@ -787,7 +1038,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'fileRelPath'),
@@ -795,7 +1047,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'fileRelPath'),
@@ -803,10 +1056,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -818,7 +1069,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -835,7 +1087,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -852,7 +1105,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -873,10 +1127,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -888,10 +1140,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -903,10 +1153,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -918,10 +1166,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -933,7 +1179,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'fileRelPath', value: ''),
@@ -941,7 +1188,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileRelPathIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileRelPathIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'fileRelPath', value: ''),
@@ -949,7 +1197,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'fileSize'),
@@ -957,7 +1206,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'fileSize'),
@@ -965,7 +1215,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeEqualTo(int? value) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'fileSize', value: value),
@@ -973,10 +1224,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeGreaterThan(int? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
@@ -988,10 +1237,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeLessThan(
-    int? value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeLessThan(int? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.lessThan(
@@ -1003,7 +1250,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> fileSizeBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  fileSizeBetween(
     int? lower,
     int? upper, {
     bool includeLower = true,
@@ -1022,7 +1270,9 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> idEqualTo(
+    Id value,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'id', value: value),
@@ -1030,7 +1280,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -1045,7 +1295,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> idLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -1060,7 +1310,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> idBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -1079,7 +1329,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'mimeType'),
@@ -1087,7 +1338,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'mimeType'),
@@ -1095,10 +1347,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -1110,7 +1360,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1127,7 +1378,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1144,7 +1396,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1165,10 +1418,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -1180,10 +1431,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -1195,10 +1444,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -1210,10 +1457,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -1225,7 +1470,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'mimeType', value: ''),
@@ -1233,7 +1479,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> mimeTypeIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  mimeTypeIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'mimeType', value: ''),
@@ -1241,7 +1488,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'note'),
@@ -1249,7 +1496,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  noteIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'note'),
@@ -1257,7 +1505,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteEqualTo(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1272,7 +1520,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  noteGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1289,7 +1538,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1306,7 +1555,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1327,10 +1576,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  noteStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -1342,7 +1589,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteEndsWith(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1357,7 +1604,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteContains(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteContains(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1372,7 +1619,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteMatches(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> noteMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
@@ -1387,7 +1634,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  noteIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'note', value: ''),
@@ -1395,7 +1643,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> noteIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  noteIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'note', value: ''),
@@ -1403,7 +1652,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'previewDescription'),
@@ -1411,7 +1661,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition>
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
   previewDescriptionIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -1420,10 +1670,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -1435,7 +1683,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1452,7 +1701,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1469,7 +1719,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1490,10 +1741,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -1505,10 +1754,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -1520,10 +1767,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -1535,10 +1780,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -1550,7 +1793,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewDescriptionIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewDescriptionIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'previewDescription', value: ''),
@@ -1558,7 +1802,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition>
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
   previewDescriptionIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -1567,7 +1811,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'previewImageUrl'),
@@ -1575,7 +1820,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'previewImageUrl'),
@@ -1583,10 +1829,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -1598,7 +1842,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1615,7 +1860,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1632,7 +1878,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1653,10 +1900,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -1668,10 +1913,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -1683,10 +1926,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -1698,10 +1939,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -1713,7 +1952,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'previewImageUrl', value: ''),
@@ -1721,7 +1961,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewImageUrlIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewImageUrlIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'previewImageUrl', value: ''),
@@ -1729,7 +1970,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'previewTitle'),
@@ -1737,7 +1979,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'previewTitle'),
@@ -1745,10 +1988,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -1760,7 +2001,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1777,7 +2019,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1794,7 +2037,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1815,10 +2059,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -1830,10 +2072,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -1845,10 +2085,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -1860,10 +2098,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -1875,7 +2111,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'previewTitle', value: ''),
@@ -1883,7 +2120,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> previewTitleIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  previewTitleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'previewTitle', value: ''),
@@ -1891,153 +2129,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.equalTo(
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.greaterThan(
-          include: include,
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.lessThan(
-          include: include,
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.between(
-          property: r'searchText',
-          lower: lower,
-          includeLower: includeLower,
-          upper: upper,
-          includeUpper: includeUpper,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.startsWith(
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.endsWith(
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.contains(
-          property: r'searchText',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.matches(
-          property: r'searchText',
-          wildcard: pattern,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.equalTo(property: r'searchText', value: ''),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> searchTextIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.greaterThan(property: r'searchText', value: ''),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> sortIndexEqualTo(int value) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sortIndexEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'sortIndex', value: value),
@@ -2045,10 +2138,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sortIndexGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sortIndexGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
@@ -2060,10 +2151,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sortIndexLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sortIndexLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.lessThan(
@@ -2075,7 +2164,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sortIndexBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sortIndexBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2094,7 +2184,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'sourceUrl'),
@@ -2102,7 +2193,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'sourceUrl'),
@@ -2110,10 +2202,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlEqualTo(String? value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -2125,7 +2215,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2142,7 +2233,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2159,7 +2251,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2180,10 +2273,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -2195,10 +2286,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -2210,10 +2299,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -2225,10 +2312,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -2240,7 +2325,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'sourceUrl', value: ''),
@@ -2248,7 +2334,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> sourceUrlIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  sourceUrlIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'sourceUrl', value: ''),
@@ -2256,10 +2343,120 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementEqualTo(
-    String value, {
-    bool caseSensitive = true,
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> stageEqualTo(
+    ResearchStage value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'stage', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  stageGreaterThan(ResearchStage value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'stage',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> stageLessThan(
+    ResearchStage value, {
+    bool include = false,
   }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'stage',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> stageBetween(
+    ResearchStage lower,
+    ResearchStage upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'stage',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> stanceEqualTo(
+    Stance value,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'stance', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  stanceGreaterThan(Stance value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'stance',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  stanceLessThan(Stance value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'stance',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> stanceBetween(
+    Stance lower,
+    Stance upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'stance',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementEqualTo(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
@@ -2271,7 +2468,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2288,7 +2486,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2305,7 +2504,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -2326,10 +2526,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -2341,10 +2539,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
@@ -2356,10 +2552,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
@@ -2371,10 +2565,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
@@ -2386,7 +2578,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'tags', value: ''),
@@ -2394,7 +2587,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsElementIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'tags', value: ''),
@@ -2402,45 +2596,43 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsLengthEqualTo(
-    int length,
-  ) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(r'tags', length, true, length, true);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(r'tags', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(r'tags', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsLengthLessThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(r'tags', 0, true, length, include);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsLengthGreaterThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(r'tags', length, include, 999999, true);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> tagsLengthBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  tagsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -2457,7 +2649,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'text'),
@@ -2465,7 +2657,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textIsNotNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  textIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'text'),
@@ -2473,7 +2666,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textEqualTo(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2488,7 +2681,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textGreaterThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  textGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2505,7 +2699,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2522,7 +2716,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2543,10 +2737,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  textStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -2558,7 +2750,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textEndsWith(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2573,7 +2765,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textContains(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textContains(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2588,7 +2780,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textMatches(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> textMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
@@ -2603,7 +2795,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textIsEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  textIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'text', value: ''),
@@ -2611,7 +2804,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> textIsNotEmpty() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  textIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'text', value: ''),
@@ -2619,169 +2813,9 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNull(property: r'thumbRelPath'),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNotNull(property: r'thumbRelPath'),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.equalTo(
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.greaterThan(
-          include: include,
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.lessThan(
-          include: include,
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.between(
-          property: r'thumbRelPath',
-          lower: lower,
-          includeLower: includeLower,
-          upper: upper,
-          includeUpper: includeUpper,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.startsWith(
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.endsWith(
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.contains(
-          property: r'thumbRelPath',
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathMatches(
-    String pattern, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.matches(
-          property: r'thumbRelPath',
-          wildcard: pattern,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.equalTo(property: r'thumbRelPath', value: ''),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> thumbRelPathIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        FilterCondition.greaterThan(property: r'thumbRelPath', value: ''),
-      );
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterFilterCondition> typeEqualTo(ItemType value) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> typeEqualTo(
+    ItemType value,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'type', value: value),
@@ -2789,10 +2823,8 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> typeGreaterThan(
-    ItemType value, {
-    bool include = false,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  typeGreaterThan(ItemType value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
@@ -2804,7 +2836,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> typeLessThan(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> typeLessThan(
     ItemType value, {
     bool include = false,
   }) {
@@ -2819,7 +2851,7 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> typeBetween(
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> typeBetween(
     ItemType lower,
     ItemType upper, {
     bool includeLower = true,
@@ -2839,406 +2871,505 @@ extension ItemQueryFilter on QueryBuilder<Item, Item, QFilterCondition> {
   }
 }
 
-extension ItemQueryObject on QueryBuilder<Item, Item, QFilterCondition> {}
+extension ResearchItemQueryObject
+    on QueryBuilder<ResearchItem, ResearchItem, QFilterCondition> {}
 
-extension ItemQueryLinks on QueryBuilder<Item, Item, QFilterCondition> {
-  QueryBuilder<Item, Item, QAfterFilterCondition> topic(FilterQuery<Topic> q) {
+extension ResearchItemQueryLinks
+    on QueryBuilder<ResearchItem, ResearchItem, QFilterCondition> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> project(
+    FilterQuery<Project> q,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.link(q, r'topic');
+      return query.link(q, r'project');
     });
   }
 
-  QueryBuilder<Item, Item, QAfterFilterCondition> topicIsNull() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  projectIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.linkLength(r'topic', 0, true, 0, true);
+      return query.linkLength(r'project', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition> claim(
+    FilterQuery<Claim> q,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'claim');
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterFilterCondition>
+  claimIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claim', 0, true, 0, true);
     });
   }
 }
 
-extension ItemQuerySortBy on QueryBuilder<Item, Item, QSortBy> {
-  QueryBuilder<Item, Item, QAfterSortBy> sortByCreatedAt() {
+extension ResearchItemQuerySortBy
+    on QueryBuilder<ResearchItem, ResearchItem, QSortBy> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByCitation() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'citation', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByCitationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'citation', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByCreatedAtDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileName() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByCredibility() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credibility', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByCredibilityDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credibility', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByFileName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileName', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileNameDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByFileNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileName', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileRelPath() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByFileRelPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileRelPath', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileRelPathDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByFileRelPathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileRelPath', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileSize() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByFileSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileSize', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByFileSizeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByFileSizeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileSize', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByMimeType() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByMimeType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeType', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByMimeTypeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByMimeTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeType', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByNote() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByNote() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'note', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByNoteDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByNoteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'note', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewDescription() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByPreviewDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewDescription', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewDescriptionDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByPreviewDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewDescription', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewImageUrl() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByPreviewImageUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewImageUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewImageUrlDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByPreviewImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewImageUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewTitle() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByPreviewTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewTitle', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByPreviewTitleDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  sortByPreviewTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewTitle', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySearchText() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySearchTextDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySortIndex() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySortIndexDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortBySortIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySourceUrl() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortBySourceUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sourceUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortBySourceUrlDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortBySourceUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sourceUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByText() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByStage() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stage', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByStageDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stage', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByStance() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stance', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByStanceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stance', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByText() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'text', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByTextDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByTextDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'text', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByThumbRelPath() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'thumbRelPath', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> sortByThumbRelPathDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'thumbRelPath', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> sortByType() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> sortByTypeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> sortByTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.desc);
     });
   }
 }
 
-extension ItemQuerySortThenBy on QueryBuilder<Item, Item, QSortThenBy> {
-  QueryBuilder<Item, Item, QAfterSortBy> thenByCreatedAt() {
+extension ResearchItemQuerySortThenBy
+    on QueryBuilder<ResearchItem, ResearchItem, QSortThenBy> {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByCitation() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'citation', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByCitationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'citation', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByCreatedAtDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileName() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByCredibility() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credibility', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByCredibilityDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'credibility', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByFileName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileName', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileNameDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByFileNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileName', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileRelPath() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByFileRelPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileRelPath', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileRelPathDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByFileRelPathDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileRelPath', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileSize() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByFileSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileSize', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByFileSizeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByFileSizeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fileSize', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenById() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByMimeType() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByMimeType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeType', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByMimeTypeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByMimeTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeType', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByNote() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByNote() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'note', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByNoteDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByNoteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'note', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewDescription() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByPreviewDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewDescription', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewDescriptionDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByPreviewDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewDescription', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewImageUrl() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByPreviewImageUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewImageUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewImageUrlDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByPreviewImageUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewImageUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewTitle() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByPreviewTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewTitle', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByPreviewTitleDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy>
+  thenByPreviewTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'previewTitle', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySearchText() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySearchTextDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySortIndex() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySortIndexDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenBySortIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySourceUrl() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenBySourceUrl() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sourceUrl', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenBySourceUrlDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenBySourceUrlDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sourceUrl', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByText() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByStage() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stage', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByStageDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stage', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByStance() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stance', Sort.asc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByStanceDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'stance', Sort.desc);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByText() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'text', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByTextDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByTextDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'text', Sort.desc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByThumbRelPath() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'thumbRelPath', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> thenByThumbRelPathDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'thumbRelPath', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Item, Item, QAfterSortBy> thenByType() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.asc);
     });
   }
 
-  QueryBuilder<Item, Item, QAfterSortBy> thenByTypeDesc() {
+  QueryBuilder<ResearchItem, ResearchItem, QAfterSortBy> thenByTypeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'type', Sort.desc);
     });
   }
 }
 
-extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
-  QueryBuilder<Item, Item, QDistinct> distinctByCreatedAt() {
+extension ResearchItemQueryWhereDistinct
+    on QueryBuilder<ResearchItem, ResearchItem, QDistinct> {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByCitation({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'citation', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByFileName({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByCredibility() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'credibility');
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByFileName({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3246,7 +3377,7 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByFileRelPath({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByFileRelPath({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3254,13 +3385,13 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByFileSize() {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByFileSize() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fileSize');
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByMimeType({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByMimeType({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3268,7 +3399,7 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByNote({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByNote({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3276,9 +3407,8 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByPreviewDescription({
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct>
+  distinctByPreviewDescription({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(
         r'previewDescription',
@@ -3287,9 +3417,8 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByPreviewImageUrl({
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct>
+  distinctByPreviewImageUrl({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(
         r'previewImageUrl',
@@ -3298,7 +3427,7 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByPreviewTitle({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByPreviewTitle({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3306,21 +3435,13 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctBySearchText({
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'searchText', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Item, Item, QDistinct> distinctBySortIndex() {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'sortIndex');
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctBySourceUrl({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctBySourceUrl({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3328,13 +3449,25 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByTags() {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByStage() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'stage');
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByStance() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'stance');
+    });
+  }
+
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByTags() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'tags');
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByText({
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByText({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -3342,119 +3475,127 @@ extension ItemQueryWhereDistinct on QueryBuilder<Item, Item, QDistinct> {
     });
   }
 
-  QueryBuilder<Item, Item, QDistinct> distinctByThumbRelPath({
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'thumbRelPath', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Item, Item, QDistinct> distinctByType() {
+  QueryBuilder<ResearchItem, ResearchItem, QDistinct> distinctByType() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'type');
     });
   }
 }
 
-extension ItemQueryProperty on QueryBuilder<Item, Item, QQueryProperty> {
-  QueryBuilder<Item, int, QQueryOperations> idProperty() {
+extension ResearchItemQueryProperty
+    on QueryBuilder<ResearchItem, ResearchItem, QQueryProperty> {
+  QueryBuilder<ResearchItem, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Item, DateTime, QQueryOperations> createdAtProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> citationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'citation');
+    });
+  }
+
+  QueryBuilder<ResearchItem, DateTime, QQueryOperations> createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> fileNameProperty() {
+  QueryBuilder<ResearchItem, Credibility, QQueryOperations>
+  credibilityProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'credibility');
+    });
+  }
+
+  QueryBuilder<ResearchItem, String?, QQueryOperations> fileNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fileName');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> fileRelPathProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> fileRelPathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fileRelPath');
     });
   }
 
-  QueryBuilder<Item, int?, QQueryOperations> fileSizeProperty() {
+  QueryBuilder<ResearchItem, int?, QQueryOperations> fileSizeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fileSize');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> mimeTypeProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> mimeTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mimeType');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> noteProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> noteProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'note');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> previewDescriptionProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations>
+  previewDescriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'previewDescription');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> previewImageUrlProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations>
+  previewImageUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'previewImageUrl');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> previewTitleProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> previewTitleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'previewTitle');
     });
   }
 
-  QueryBuilder<Item, String, QQueryOperations> searchTextProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'searchText');
-    });
-  }
-
-  QueryBuilder<Item, int, QQueryOperations> sortIndexProperty() {
+  QueryBuilder<ResearchItem, int, QQueryOperations> sortIndexProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sortIndex');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> sourceUrlProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> sourceUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sourceUrl');
     });
   }
 
-  QueryBuilder<Item, List<String>, QQueryOperations> tagsProperty() {
+  QueryBuilder<ResearchItem, ResearchStage, QQueryOperations> stageProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'stage');
+    });
+  }
+
+  QueryBuilder<ResearchItem, Stance, QQueryOperations> stanceProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'stance');
+    });
+  }
+
+  QueryBuilder<ResearchItem, List<String>, QQueryOperations> tagsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tags');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> textProperty() {
+  QueryBuilder<ResearchItem, String?, QQueryOperations> textProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'text');
     });
   }
 
-  QueryBuilder<Item, String?, QQueryOperations> thumbRelPathProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'thumbRelPath');
-    });
-  }
-
-  QueryBuilder<Item, ItemType, QQueryOperations> typeProperty() {
+  QueryBuilder<ResearchItem, ItemType, QQueryOperations> typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
     });

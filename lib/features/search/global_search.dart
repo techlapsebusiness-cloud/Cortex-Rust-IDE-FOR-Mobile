@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/item.dart';
-import '../../data/models/topic.dart';
+import '../../data/models/project.dart';
+import '../../data/models/research_item.dart';
 import '../../providers/items_provider.dart';
+import '../../providers/projects_provider.dart';
 import '../../providers/search_provider.dart';
-import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
 import '../feed/item_detail.dart';
@@ -168,12 +168,14 @@ class _GlobalSearchPageState extends ConsumerState<GlobalSearchPage> {
                 ),
               ),
               data: (data) {
-                final hasQuery = ref.watch(globalSearchQueryProvider).trim().isNotEmpty;
-                final hasFilter = typeFilter != FeedFilter.all || tagFilter != null;
+                final hasQuery =
+                    ref.watch(globalSearchQueryProvider).trim().isNotEmpty;
+                final hasFilter =
+                    typeFilter != FeedFilter.all || tagFilter != null;
                 if (!hasQuery && !hasFilter) {
                   return Center(
                     child: Text(
-                      'SEARCH TOPICS & CAPTURES',
+                      'SEARCH PROJECTS & CAPTURES',
                       style: CortexTheme.orbitron(
                         fontSize: 13,
                         color: CortexColors.muted,
@@ -181,7 +183,7 @@ class _GlobalSearchPageState extends ConsumerState<GlobalSearchPage> {
                     ),
                   );
                 }
-                if (data.topicHits.isEmpty && data.groupedItems.isEmpty) {
+                if (data.projectHits.isEmpty && data.groupedItems.isEmpty) {
                   return Center(
                     child: Text(
                       'NO MATCHES',
@@ -195,30 +197,38 @@ class _GlobalSearchPageState extends ConsumerState<GlobalSearchPage> {
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                   children: [
-                    if (data.topicHits.isNotEmpty) ...[
+                    if (data.projectHits.isNotEmpty) ...[
                       Text(
-                        'TOPICS',
+                        'PROJECTS',
                         style: CortexTheme.orbitron(
                           fontSize: 12,
                           color: CortexColors.accent,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      for (final t in data.topicHits)
+                      for (final p in data.projectHits)
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: Container(
                             width: 4,
                             height: 28,
-                            color: Color(t.colorValue),
+                            color: Color(p.colorValue),
                           ),
                           title: Text(
-                            t.title.toUpperCase(),
+                            p.title.toUpperCase(),
                             style: CortexTheme.orbitron(fontSize: 12),
                           ),
+                          subtitle: p.researchQuestion.isNotEmpty
+                              ? Text(
+                                  p.researchQuestion,
+                                  style: CortexTheme.mono(fontSize: 10),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : null,
                           onTap: () {
-                            ref.read(selectedTopicIdProvider.notifier).state =
-                                t.id;
+                            ref.read(selectedProjectIdProvider.notifier).state =
+                                p.id;
                           },
                         ),
                       const SizedBox(height: 16),
@@ -251,8 +261,8 @@ class _GlobalSearchPageState extends ConsumerState<GlobalSearchPage> {
     );
   }
 
-  void _openItem(BuildContext context, Item item, Topic topic) {
-    ref.read(selectedTopicIdProvider.notifier).state = topic.id;
+  void _openItem(BuildContext context, ResearchItem item, Project project) {
+    ref.read(selectedProjectIdProvider.notifier).state = project.id;
     Navigator.of(context).push(
       PageRouteBuilder<void>(
         pageBuilder: (context, animation, secondary) {

@@ -47,14 +47,14 @@ class OnboardingPage extends ConsumerWidget {
                       index: '02',
                       title: 'CAPTURE',
                       body:
-                          'Share text, links, images, or files from any app into CORTEX — or drag across the split-screen divider onto a topic feed for instant quick-add.',
+                          'Share text, links, images, or files from any app into CORTEX — or drag across the split-screen divider onto a project stage for instant quick-add.',
                     ),
                     const SizedBox(height: 24),
                     _Step(
                       index: '03',
                       title: 'ORGANIZE',
                       body:
-                          'Everything lands in research topics. Add notes and tags, search offline, and keep the real browser where it belongs — Chrome.',
+                          'Everything lands in research projects with scientific-method stages. Add notes and tags, track claims and evidence, search offline, and keep the real browser where it belongs — Chrome.',
                     ),
                   ],
                 ),

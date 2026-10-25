@@ -5,7 +5,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
-/// Copies bytes into app documents under `cortex/<topicId>/<uuid>.<ext>`
+/// Copies bytes into app documents under `cortex/<projectId>/<uuid>.<ext>`
 /// and returns a path **relative** to the documents directory.
 class FileStorage {
   FileStorage._();
@@ -21,14 +21,14 @@ class FileStorage {
 
   static Future<StoredFile> copyFile({
     required File source,
-    required int topicId,
+    required int projectId,
     String? preferredName,
     String? mimeType,
   }) async {
     final docs = await docsDir();
     final ext = _extensionOf(source.path, preferredName);
     final fileName = preferredName ?? p.basename(source.path);
-    final relPath = p.join('cortex', '$topicId', '${_uuid.v4()}$ext');
+    final relPath = p.join('cortex', '$projectId', '${_uuid.v4()}$ext');
     final dest = File(p.join(docs.path, relPath));
     await dest.parent.create(recursive: true);
     await source.copy(dest.path);
@@ -47,13 +47,13 @@ class FileStorage {
 
   static Future<StoredFile> writeBytes({
     required List<int> bytes,
-    required int topicId,
+    required int projectId,
     required String fileName,
     String? mimeType,
   }) async {
     final docs = await docsDir();
     final ext = p.extension(fileName);
-    final relPath = p.join('cortex', '$topicId', '${_uuid.v4()}$ext');
+    final relPath = p.join('cortex', '$projectId', '${_uuid.v4()}$ext');
     final dest = File(p.join(docs.path, relPath));
     await dest.parent.create(recursive: true);
     await dest.writeAsBytes(bytes, flush: true);

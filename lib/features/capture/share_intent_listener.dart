@@ -6,7 +6,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import '../../capture/capture_payload.dart';
 import '../../providers/capture_provider.dart';
-import '../../providers/isar_provider.dart';
 import 'capture_sheet.dart';
 
 /// Listens for cold-start and warm share intents and opens CaptureSheet.
@@ -33,7 +32,6 @@ class _ShareIntentListenerState extends ConsumerState<ShareIntentListener> {
   @override
   void initState() {
     super.initState();
-    // Defer until first frame so ProviderScope is ready.
     WidgetsBinding.instance.addPostFrameCallback((_) => _ensureBound());
   }
 
@@ -62,18 +60,9 @@ class _ShareIntentListenerState extends ConsumerState<ShareIntentListener> {
     if (payloads.isEmpty || !mounted) return;
 
     enqueueCapture(ref, payloads: payloads);
-    await _waitForDb();
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     if (!mounted) return;
     await _presentSheet(payloads, retries: 0);
-  }
-
-  Future<void> _waitForDb() async {
-    // CaptureSheet needs topics from Isar.
-    for (var i = 0; i < 40; i++) {
-      final ready = ref.read(isarProvider).hasValue;
-      if (ready) return;
-      await Future<void>.delayed(const Duration(milliseconds: 50));
-    }
   }
 
   Future<void> _presentSheet(
@@ -89,13 +78,15 @@ class _ShareIntentListenerState extends ConsumerState<ShareIntentListener> {
       return _presentSheet(payloads, retries: retries + 1);
     }
 
-    final targetId = ref.read(captureTargetTopicIdProvider);
+    final targetId = ref.read(captureTargetProjectIdProvider);
+    final stage = ref.read(captureTargetStageProvider);
     _sheetOpen = true;
     try {
       await showCaptureSheet(
         nav.context,
         payloads: payloads,
-        targetTopicId: targetId,
+        targetProjectId: targetId,
+        initialStage: stage,
       );
     } finally {
       _sheetOpen = false;

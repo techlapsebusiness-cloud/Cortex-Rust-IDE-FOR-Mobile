@@ -8,8 +8,8 @@ import 'package:share_plus/share_plus.dart';
 import '../../data/export_service.dart';
 import '../../data/file_storage.dart';
 import '../../providers/isar_provider.dart';
+import '../../providers/projects_provider.dart';
 import '../../providers/settings_provider.dart';
-import '../../providers/topics_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
 import '../../utils/format.dart';
@@ -33,8 +33,8 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final topics = ref.watch(topicsProvider).valueOrNull ?? [];
-    final defaultId = ref.watch(defaultCaptureTopicIdProvider).valueOrNull;
+    final projects = ref.watch(projectsProvider).valueOrNull ?? [];
+    final defaultId = ref.watch(defaultCaptureProjectIdProvider).valueOrNull;
     final accent =
         ref.watch(accentColorValueProvider).valueOrNull ?? 0xFF22D3EE;
     final storageAsync = ref.watch(_storageProvider);
@@ -93,24 +93,25 @@ class SettingsPage extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           DropdownButtonFormField<int?>(
-            initialValue: topics.any((t) => t.id == defaultId) ? defaultId : null,
+            initialValue:
+                projects.any((p) => p.id == defaultId) ? defaultId : null,
             dropdownColor: CortexColors.elevated,
             decoration:
-                const InputDecoration(labelText: 'Default capture topic'),
+                const InputDecoration(labelText: 'Default capture project'),
             items: [
               const DropdownMenuItem<int?>(
                 value: null,
                 child: Text('None (ask each time)'),
               ),
-              for (final t in topics)
+              for (final p in projects)
                 DropdownMenuItem<int?>(
-                  value: t.id,
-                  child: Text(t.title),
+                  value: p.id,
+                  child: Text(p.title),
                 ),
             ],
             onChanged: (id) async {
               final repo = ref.read(settingsRepositoryProvider).valueOrNull;
-              await repo?.setDefaultTopicId(id);
+              await repo?.setDefaultProjectId(id);
               ref.invalidate(sharedPrefsProvider);
             },
           ),
@@ -190,8 +191,7 @@ class SettingsPage extends ConsumerWidget {
   }
 
   Future<void> _export(BuildContext context, WidgetRef ref) async {
-    final isar = ref.read(isarProvider).valueOrNull;
-    if (isar == null) return;
+    final isar = ref.read(isarProvider);
     try {
       final file = await ExportService(isar).exportBundle();
       if (!context.mounted) return;
@@ -221,11 +221,10 @@ class SettingsPage extends ConsumerWidget {
     );
     final path = picked?.files.firstOrNull?.path;
     if (path == null) return;
-    final isar = ref.read(isarProvider).valueOrNull;
-    if (isar == null) return;
+    final isar = ref.read(isarProvider);
     try {
       await ExportService(isar).importBundle(File(path));
-      ref.invalidate(topicsProvider);
+      ref.invalidate(projectsProvider);
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

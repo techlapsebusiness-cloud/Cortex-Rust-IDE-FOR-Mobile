@@ -1,47 +1,64 @@
 import 'dart:io';
 
-import '../data/models/item.dart';
-import '../data/models/item_type.dart';
-import '../data/models/topic.dart';
+import '../data/models/claim.dart';
+import '../data/models/project.dart';
+import '../data/models/research_enums.dart';
+import '../data/models/research_item.dart';
 import '../providers/items_provider.dart';
 import 'capture_payload.dart';
 
-Future<Item> persistCapturePayload(
+Future<ResearchItem> persistCapturePayload(
   ItemsRepository repo,
-  Topic topic,
+  Project project,
   CapturePayload payload, {
+  ResearchStage stage = ResearchStage.evidence,
   String? note,
   List<String> tags = const [],
+  Claim? claim,
+  Stance stance = Stance.neutral,
+  Credibility credibility = Credibility.unknown,
 }) async {
   switch (payload.type) {
     case ItemType.text:
       return repo.addText(
-        topic: topic,
+        project: project,
         text: payload.text ?? '',
+        stage: stage,
         note: note,
         tags: tags,
         sourceUrl: payload.sourceUrl,
+        claim: claim,
+        stance: stance,
+        credibility: credibility,
       );
     case ItemType.link:
       return repo.addLink(
-        topic: topic,
+        project: project,
         url: payload.sourceUrl ?? payload.text ?? '',
+        stage: stage,
         note: note,
         tags: tags,
+        claim: claim,
+        stance: stance,
+        credibility: credibility,
       );
     case ItemType.image:
     case ItemType.video:
     case ItemType.file:
       if (payload.bytes != null && payload.bytes!.isNotEmpty) {
         return repo.addFileFromBytes(
-          topic: topic,
+          project: project,
           bytes: payload.bytes!,
           type: payload.type,
           fileName: payload.fileName ?? 'capture.bin',
+          stage: stage,
           mimeType: payload.mimeType,
           note: note,
           tags: tags,
           sourceUrl: payload.sourceUrl,
+          claim: claim,
+          stance: stance,
+          credibility: credibility,
         );
       }
       final path = payload.filePath;
@@ -49,14 +66,18 @@ Future<Item> persistCapturePayload(
         throw StateError('Shared file unavailable for ${payload.type.name}');
       }
       return repo.addFileFromPath(
-        topic: topic,
+        project: project,
         path: path,
         type: payload.type,
+        stage: stage,
         fileName: payload.fileName,
         mimeType: payload.mimeType,
         note: note,
         tags: tags,
         sourceUrl: payload.sourceUrl,
+        claim: claim,
+        stance: stance,
+        credibility: credibility,
       );
   }
 }

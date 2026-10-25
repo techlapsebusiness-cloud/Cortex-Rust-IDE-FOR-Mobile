@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/enrichment/link_preview_service.dart';
+import '../../../data/enrichment/link_utils.dart';
 import '../../../data/file_storage.dart';
-import '../../../data/models/item.dart';
-import '../../../data/models/item_type.dart';
+import '../../../data/models/research_enums.dart';
+import '../../../data/models/research_item.dart';
 import '../../../theme/cortex_colors.dart';
 import '../../../theme/cortex_theme.dart';
 import '../../../utils/format.dart';
@@ -19,7 +20,7 @@ class ItemCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final Item item;
+  final ResearchItem item;
   final VoidCallback onTap;
 
   @override
@@ -41,6 +42,14 @@ class ItemCard extends StatelessWidget {
               Row(
                 children: [
                   TypeBadge(type: item.type),
+                  if (item.stance != Stance.neutral) ...[
+                    const SizedBox(width: 6),
+                    _StanceBadge(stance: item.stance),
+                  ],
+                  if (item.credibility != Credibility.unknown) ...[
+                    const SizedBox(width: 6),
+                    _CredibilityBadge(credibility: item.credibility),
+                  ],
                   const Spacer(),
                   Text(
                     formatRelativeTime(item.createdAt),
@@ -95,7 +104,7 @@ class ItemCard extends StatelessWidget {
 
 class _TextBody extends StatelessWidget {
   const _TextBody({required this.item});
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -135,17 +144,23 @@ class _TextBody extends StatelessWidget {
 
 class _LinkBody extends StatelessWidget {
   const _LinkBody({required this.item});
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context) {
     final pending = item.previewTitle == item.sourceUrl &&
         item.previewImageUrl == null;
     final title = item.previewTitle ?? item.sourceUrl ?? 'Link';
+    final isYt = item.sourceUrl != null &&
+        LinkUtils.isYouTubeUrl(item.sourceUrl!);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _PreviewThumb(imageRef: item.previewImageUrl, pending: pending),
+        _PreviewThumb(
+          imageRef: item.previewImageUrl,
+          pending: pending,
+          youtube: isYt,
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -172,8 +187,11 @@ class _LinkBody extends StatelessWidget {
                 ),
               const SizedBox(height: 6),
               Text(
-                domainOf(item.sourceUrl),
-                style: CortexTheme.mono(fontSize: 11),
+                isYt ? 'youtube.com' : domainOf(item.sourceUrl),
+                style: CortexTheme.mono(
+                  fontSize: 11,
+                  color: isYt ? CortexColors.accent : CortexColors.muted,
+                ),
               ),
               if (item.previewDescription != null &&
                   item.previewDescription!.isNotEmpty) ...[
@@ -197,15 +215,68 @@ class _LinkBody extends StatelessWidget {
 }
 
 class _PreviewThumb extends StatelessWidget {
-  const _PreviewThumb({required this.imageRef, required this.pending});
+  const _PreviewThumb({
+    required this.imageRef,
+    required this.pending,
+    this.youtube = false,
+  });
 
   final String? imageRef;
   final bool pending;
+  final bool youtube;
 
   @override
   Widget build(BuildContext context) {
+    Widget image;
+    if (pending) {
+      image = const Center(
+        child: SizedBox(
+          width: 16,
+          height: 16,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: CortexColors.accent,
+          ),
+        ),
+      );
+    } else if (imageRef == null) {
+      image = Icon(
+        youtube ? Icons.play_circle_outline : Icons.link,
+        color: CortexColors.accent,
+      );
+    } else if (LinkPreviewService.isCachedLocalPath(imageRef)) {
+      image = FutureBuilder<String>(
+        future: FileStorage.absoluteFromRelative(imageRef!),
+        builder: (context, snap) {
+          if (!snap.hasData) {
+            return Icon(
+              youtube ? Icons.play_circle_outline : Icons.link,
+              color: CortexColors.accent,
+            );
+          }
+          return Image.file(
+            File(snap.data!),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Icon(
+              youtube ? Icons.play_circle_outline : Icons.link,
+              color: CortexColors.accent,
+            ),
+          );
+        },
+      );
+    } else {
+      image = Image.network(
+        imageRef!,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          youtube ? Icons.play_circle_outline : Icons.link,
+          color: CortexColors.accent,
+        ),
+      );
+    }
+
     return Container(
-      width: 56,
+      width: 72,
       height: 56,
       decoration: BoxDecoration(
         color: CortexColors.elevated,
@@ -213,47 +284,27 @@ class _PreviewThumb extends StatelessWidget {
         border: Border.all(color: CortexColors.hairline),
       ),
       clipBehavior: Clip.antiAlias,
-      child: pending
-          ? const Center(
-              child: SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: CortexColors.accent,
-                ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          image,
+          if (youtube && !pending && imageRef != null)
+            const Center(
+              child: Icon(
+                Icons.play_circle_fill,
+                color: Colors.white70,
+                size: 28,
               ),
-            )
-          : imageRef == null
-              ? const Icon(Icons.link, color: CortexColors.accent)
-              : LinkPreviewService.isCachedLocalPath(imageRef)
-                  ? FutureBuilder<String>(
-                      future: FileStorage.absoluteFromRelative(imageRef!),
-                      builder: (context, snap) {
-                        if (!snap.hasData) {
-                          return const Icon(Icons.link, color: CortexColors.accent);
-                        }
-                        return Image.file(
-                          File(snap.data!),
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.link, color: CortexColors.accent),
-                        );
-                      },
-                    )
-                  : Image.network(
-                      imageRef!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.link, color: CortexColors.accent),
-                    ),
+            ),
+        ],
+      ),
     );
   }
 }
 
 class _ImageBody extends ConsumerWidget {
   const _ImageBody({required this.item});
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -292,7 +343,7 @@ class _ImageBody extends ConsumerWidget {
 
 class _VideoBody extends ConsumerWidget {
   const _VideoBody({required this.item});
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -303,34 +354,8 @@ class _VideoBody extends ConsumerWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            if (item.thumbRelPath != null)
-              FutureBuilder<String>(
-                future: FileStorage.absoluteFromRelative(item.thumbRelPath!),
-                builder: (context, snap) {
-                  if (!snap.hasData) {
-                    return Container(
-                      color: CortexColors.elevated,
-                      child: const Icon(
-                        Icons.videocam_outlined,
-                        color: CortexColors.muted,
-                        size: 36,
-                      ),
-                    );
-                  }
-                  return Image.file(
-                    File(snap.data!),
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: CortexColors.elevated,
-                      child: const Icon(
-                        Icons.videocam_outlined,
-                        color: CortexColors.muted,
-                        size: 36,
-                      ),
-                    ),
-                  );
-                },
-              )
+            if (item.previewImageUrl != null)
+              _FullBleedThumb(imageRef: item.previewImageUrl!)
             else
               Container(
                 color: CortexColors.elevated,
@@ -380,7 +405,7 @@ class _VideoBody extends ConsumerWidget {
 
 class _FileBody extends StatelessWidget {
   const _FileBody({required this.item});
-  final Item item;
+  final ResearchItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -431,5 +456,105 @@ class _FileBody extends StatelessWidget {
     if (m.contains('audio')) return Icons.audiotrack;
     if (m.startsWith('text/')) return Icons.description_outlined;
     return Icons.insert_drive_file_outlined;
+  }
+}
+
+class _FullBleedThumb extends StatelessWidget {
+  const _FullBleedThumb({required this.imageRef});
+
+  final String imageRef;
+
+  @override
+  Widget build(BuildContext context) {
+    if (LinkPreviewService.isCachedLocalPath(imageRef)) {
+      return FutureBuilder<String>(
+        future: FileStorage.absoluteFromRelative(imageRef),
+        builder: (context, snap) {
+          if (!snap.hasData) {
+            return Container(
+              color: CortexColors.elevated,
+              child: const Icon(
+                Icons.videocam_outlined,
+                color: CortexColors.muted,
+                size: 36,
+              ),
+            );
+          }
+          return Image.file(
+            File(snap.data!),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Container(
+              color: CortexColors.elevated,
+              child: const Icon(
+                Icons.videocam_outlined,
+                color: CortexColors.muted,
+                size: 36,
+              ),
+            ),
+          );
+        },
+      );
+    }
+    return Image.network(
+      imageRef,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => Container(
+        color: CortexColors.elevated,
+        child: const Icon(
+          Icons.videocam_outlined,
+          color: CortexColors.muted,
+          size: 36,
+        ),
+      ),
+    );
+  }
+}
+
+class _StanceBadge extends StatelessWidget {
+  const _StanceBadge({required this.stance});
+
+  final Stance stance;
+
+  @override
+  Widget build(BuildContext context) {
+    final (label, color) = switch (stance) {
+      Stance.supports => ('▲', CortexColors.accent),
+      Stance.refutes => ('▼', CortexColors.danger),
+      Stance.neutral => ('—', CortexColors.muted),
+    };
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: CortexColors.elevated,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: CortexColors.hairline),
+      ),
+      child: Text(
+        label,
+        style: CortexTheme.mono(fontSize: 10, color: color),
+      ),
+    );
+  }
+}
+
+class _CredibilityBadge extends StatelessWidget {
+  const _CredibilityBadge({required this.credibility});
+
+  final Credibility credibility;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+      decoration: BoxDecoration(
+        color: CortexColors.elevated,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: CortexColors.hairline),
+      ),
+      child: Text(
+        credibility.name.toUpperCase(),
+        style: CortexTheme.mono(fontSize: 9, color: CortexColors.muted),
+      ),
+    );
   }
 }

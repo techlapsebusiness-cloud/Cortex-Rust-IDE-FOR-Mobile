@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../data/models/topic.dart';
+import '../../data/models/project.dart';
+import '../../data/models/research_enums.dart';
 import '../../providers/items_provider.dart';
 import '../../theme/cortex_colors.dart';
 import '../../theme/cortex_theme.dart';
 
 Future<void> showManualAddSheet(
   BuildContext context, {
-  required Topic topic,
+  required Project project,
+  ResearchStage stage = ResearchStage.evidence,
 }) {
   return showModalBottomSheet<void>(
     context: context,
@@ -19,17 +21,31 @@ Future<void> showManualAddSheet(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       side: BorderSide(color: CortexColors.hairline),
     ),
-    builder: (ctx) => _ManualAddSheet(topic: topic),
+    builder: (ctx) => _ManualAddSheet(project: project, stage: stage),
   );
 }
 
-class _ManualAddSheet extends ConsumerWidget {
-  const _ManualAddSheet({required this.topic});
+class _ManualAddSheet extends ConsumerStatefulWidget {
+  const _ManualAddSheet({required this.project, required this.stage});
 
-  final Topic topic;
+  final Project project;
+  final ResearchStage stage;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ManualAddSheet> createState() => _ManualAddSheetState();
+}
+
+class _ManualAddSheetState extends ConsumerState<_ManualAddSheet> {
+  late ResearchStage _stage;
+
+  @override
+  void initState() {
+    super.initState();
+    _stage = widget.stage;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -49,21 +65,47 @@ class _ManualAddSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 14),
             Text(
-              'ADD TO TOPIC',
+              'ADD TO PROJECT',
               style: CortexTheme.orbitron(
                 fontSize: 13,
                 color: CortexColors.accent,
               ),
             ),
             const SizedBox(height: 8),
-            Text(topic.title, style: CortexTheme.mono(fontSize: 11)),
+            Text(widget.project.title, style: CortexTheme.mono(fontSize: 11)),
+            const SizedBox(height: 12),
+            Text('STAGE', style: CortexTheme.mono(fontSize: 11)),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final stage in ResearchStage.values)
+                  ChoiceChip(
+                    label: Text(
+                      stage.shortLabel,
+                      style: CortexTheme.mono(
+                        fontSize: 11,
+                        color: _stage == stage
+                            ? CortexColors.background
+                            : CortexColors.text,
+                      ),
+                    ),
+                    selected: _stage == stage,
+                    selectedColor: CortexColors.accent,
+                    backgroundColor: CortexColors.surface,
+                    side: const BorderSide(color: CortexColors.hairline),
+                    onSelected: (_) => setState(() => _stage = stage),
+                  ),
+              ],
+            ),
             const SizedBox(height: 12),
             _AddTile(
               icon: Icons.notes,
               label: 'Text note',
               onTap: () async {
                 Navigator.pop(context);
-                await _addText(context, ref);
+                await _addText(context);
               },
             ),
             _AddTile(
@@ -71,7 +113,7 @@ class _ManualAddSheet extends ConsumerWidget {
               label: 'Paste link',
               onTap: () async {
                 Navigator.pop(context);
-                await _addLink(context, ref);
+                await _addLink(context);
               },
             ),
             _AddTile(
@@ -79,7 +121,7 @@ class _ManualAddSheet extends ConsumerWidget {
               label: 'Image from gallery',
               onTap: () async {
                 Navigator.pop(context);
-                await _addImage(context, ref);
+                await _addImage(context);
               },
             ),
             _AddTile(
@@ -87,7 +129,7 @@ class _ManualAddSheet extends ConsumerWidget {
               label: 'File',
               onTap: () async {
                 Navigator.pop(context);
-                await _addFile(context, ref);
+                await _addFile(context);
               },
             ),
           ],
@@ -96,7 +138,7 @@ class _ManualAddSheet extends ConsumerWidget {
     );
   }
 
-  Future<void> _addText(BuildContext context, WidgetRef ref) async {
+  Future<void> _addText(BuildContext context) async {
     final result = await _promptFields(
       context,
       title: 'TEXT NOTE',
@@ -105,17 +147,17 @@ class _ManualAddSheet extends ConsumerWidget {
       multiline: true,
     );
     if (result == null) return;
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+    final repo = ref.read(itemsRepositoryProvider);
     await repo.addText(
-      topic: topic,
+      project: widget.project,
       text: result.primary,
+      stage: _stage,
       note: result.note,
       tags: result.tags,
     );
   }
 
-  Future<void> _addLink(BuildContext context, WidgetRef ref) async {
+  Future<void> _addLink(BuildContext context) async {
     final result = await _promptFields(
       context,
       title: 'PASTE LINK',
@@ -123,27 +165,28 @@ class _ManualAddSheet extends ConsumerWidget {
       primaryHint: 'https://…',
     );
     if (result == null) return;
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+    final repo = ref.read(itemsRepositoryProvider);
     final raw = result.primary.trim();
     if (ItemsRepository.looksLikeUrl(raw)) {
       await repo.addLink(
-        topic: topic,
+        project: widget.project,
         url: raw,
+        stage: _stage,
         note: result.note,
         tags: result.tags,
       );
     } else {
       await repo.addText(
-        topic: topic,
+        project: widget.project,
         text: raw,
+        stage: _stage,
         note: result.note,
         tags: result.tags,
       );
     }
   }
 
-  Future<void> _addImage(BuildContext context, WidgetRef ref) async {
+  Future<void> _addImage(BuildContext context) async {
     final picker = ImagePicker();
     final x = await picker.pickImage(source: ImageSource.gallery);
     if (x == null) return;
@@ -153,12 +196,12 @@ class _ManualAddSheet extends ConsumerWidget {
       title: 'IMAGE CAPTURE',
       skipPrimary: true,
     );
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+    final repo = ref.read(itemsRepositoryProvider);
     await repo.addFileFromPath(
-      topic: topic,
+      project: widget.project,
       path: x.path,
       type: ItemsRepository.typeFromMime(x.mimeType, path: x.name),
+      stage: _stage,
       fileName: x.name,
       mimeType: x.mimeType,
       note: meta?.note,
@@ -166,7 +209,7 @@ class _ManualAddSheet extends ConsumerWidget {
     );
   }
 
-  Future<void> _addFile(BuildContext context, WidgetRef ref) async {
+  Future<void> _addFile(BuildContext context) async {
     final picked = await FilePicker.platform.pickFiles(withData: false);
     if (picked == null || picked.files.isEmpty) return;
     final f = picked.files.first;
@@ -177,13 +220,13 @@ class _ManualAddSheet extends ConsumerWidget {
       title: 'FILE CAPTURE',
       skipPrimary: true,
     );
-    final repo = ref.read(itemsRepositoryProvider).valueOrNull;
-    if (repo == null) return;
+    final repo = ref.read(itemsRepositoryProvider);
     final type = ItemsRepository.typeFromMime(null, path: f.path ?? f.name);
     await repo.addFileFromPath(
-      topic: topic,
+      project: widget.project,
       path: f.path!,
       type: type,
+      stage: _stage,
       fileName: f.name,
       note: meta?.note,
       tags: meta?.tags ?? const [],

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/models/topic.dart';
-import '../../providers/topics_provider.dart';
+import '../../data/models/project.dart';
+import '../../providers/projects_provider.dart';
 import '../../theme/cortex_colors.dart';
-import '../feed/topic_feed.dart';
+import '../projects/project_workspace.dart';
+import '../projects/projects_pane.dart';
 import '../search/global_search.dart';
 import '../settings/settings_page.dart';
-import '../topics/topics_pane.dart';
 
 /// Breakpoint for Fold unfolded two-pane layout (§9).
 const double kCortexWideBreakpoint = 840;
@@ -54,8 +54,8 @@ class _NarrowShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pages = [
-      TopicsPane(
-        onTopicSelected: (topic) => _openFeed(context, topic),
+      ProjectsPane(
+        onProjectSelected: (project) => _openWorkspace(context, project),
       ),
       const GlobalSearchPage(),
       const SettingsPage(),
@@ -74,7 +74,7 @@ class _NarrowShell extends ConsumerWidget {
           NavigationDestination(
             icon: Icon(Icons.grid_view_outlined, color: CortexColors.muted),
             selectedIcon: Icon(Icons.grid_view, color: CortexColors.accent),
-            label: 'Topics',
+            label: 'Projects',
           ),
           NavigationDestination(
             icon: Icon(Icons.search, color: CortexColors.muted),
@@ -91,13 +91,13 @@ class _NarrowShell extends ConsumerWidget {
     );
   }
 
-  void _openFeed(BuildContext context, Topic topic) {
+  void _openWorkspace(BuildContext context, Project project) {
     Navigator.of(context).push(
       PageRouteBuilder<void>(
         pageBuilder: (context, animation, secondary) {
           return FadeTransition(
             opacity: animation,
-            child: const TopicFeed(showBack: true),
+            child: const ProjectWorkspace(showBack: true),
           );
         },
         transitionDuration: const Duration(milliseconds: 200),
@@ -117,8 +117,7 @@ class _WideShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Keep selected topic across fold/unfold via Riverpod state.
-    ref.watch(selectedTopicIdProvider);
+    ref.watch(selectedProjectIdProvider);
 
     if (tabIndex == 1) {
       return Scaffold(
@@ -143,13 +142,14 @@ class _WideShell extends ConsumerWidget {
         children: [
           SizedBox(
             width: MediaQuery.sizeOf(context).width * 0.38,
-            child: const TopicsPane(embedded: true),
+            child: const ProjectsPane(embedded: true),
           ),
           Container(width: 1, color: CortexColors.hairline),
-          const Expanded(child: TopicFeed()),
+          const Expanded(child: ProjectWorkspace()),
         ],
       ),
-      bottomNavigationBar: _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
+      bottomNavigationBar:
+          _WideNav(tabIndex: tabIndex, onTabChanged: onTabChanged),
     );
   }
 }
@@ -172,7 +172,7 @@ class _WideNav extends StatelessWidget {
         NavigationDestination(
           icon: Icon(Icons.grid_view_outlined, color: CortexColors.muted),
           selectedIcon: Icon(Icons.grid_view, color: CortexColors.accent),
-          label: 'Topics',
+          label: 'Projects',
         ),
         NavigationDestination(
           icon: Icon(Icons.search, color: CortexColors.muted),

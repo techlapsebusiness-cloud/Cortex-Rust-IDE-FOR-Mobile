@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'topic.dart';
+part of 'project.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -9,13 +9,13 @@ part of 'topic.dart';
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
-extension GetTopicCollection on Isar {
-  IsarCollection<Topic> get topics => this.collection();
+extension GetProjectCollection on Isar {
+  IsarCollection<Project> get projects => this.collection();
 }
 
-const TopicSchema = CollectionSchema(
-  name: r'Topic',
-  id: 5334984740663963266,
+const ProjectSchema = CollectionSchema(
+  name: r'Project',
+  id: 3302999628838485849,
   properties: {
     r'colorValue': PropertySchema(
       id: 0,
@@ -32,14 +32,10 @@ const TopicSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'iconName': PropertySchema(
-      id: 3,
-      name: r'iconName',
-      type: IsarType.string,
-    ),
-    r'searchText': PropertySchema(
+    r'field': PropertySchema(id: 3, name: r'field', type: IsarType.string),
+    r'researchQuestion': PropertySchema(
       id: 4,
-      name: r'searchText',
+      name: r'researchQuestion',
       type: IsarType.string,
     ),
     r'sortIndex': PropertySchema(
@@ -55,58 +51,38 @@ const TopicSchema = CollectionSchema(
     ),
   },
 
-  estimateSize: _topicEstimateSize,
-  serialize: _topicSerialize,
-  deserialize: _topicDeserialize,
-  deserializeProp: _topicDeserializeProp,
+  estimateSize: _projectEstimateSize,
+  serialize: _projectSerialize,
+  deserialize: _projectDeserialize,
+  deserializeProp: _projectDeserializeProp,
   idName: r'id',
-  indexes: {
-    r'title': IndexSchema(
-      id: -7636685945352118059,
-      name: r'title',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'title',
-          type: IndexType.value,
-          caseSensitive: false,
-        ),
-      ],
-    ),
-    r'searchText': IndexSchema(
-      id: -8276020959797920665,
-      name: r'searchText',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'searchText',
-          type: IndexType.value,
-          caseSensitive: false,
-        ),
-      ],
-    ),
-  },
+  indexes: {},
   links: {
     r'items': LinkSchema(
-      id: 5609730794128401317,
+      id: -3634723277182642923,
       name: r'items',
-      target: r'Item',
+      target: r'ResearchItem',
       single: false,
-      linkName: r'topic',
+      linkName: r'project',
+    ),
+    r'claims': LinkSchema(
+      id: 4824972475324923173,
+      name: r'claims',
+      target: r'Claim',
+      single: false,
+      linkName: r'project',
     ),
   },
   embeddedSchemas: {},
 
-  getId: _topicGetId,
-  getLinks: _topicGetLinks,
-  attach: _topicAttach,
+  getId: _projectGetId,
+  getLinks: _projectGetLinks,
+  attach: _projectAttach,
   version: '3.3.2',
 );
 
-int _topicEstimateSize(
-  Topic object,
+int _projectEstimateSize(
+  Project object,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
@@ -118,18 +94,18 @@ int _topicEstimateSize(
     }
   }
   {
-    final value = object.iconName;
+    final value = object.field;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.searchText.length * 3;
+  bytesCount += 3 + object.researchQuestion.length * 3;
   bytesCount += 3 + object.title.length * 3;
   return bytesCount;
 }
 
-void _topicSerialize(
-  Topic object,
+void _projectSerialize(
+  Project object,
   IsarWriter writer,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
@@ -137,33 +113,33 @@ void _topicSerialize(
   writer.writeLong(offsets[0], object.colorValue);
   writer.writeDateTime(offsets[1], object.createdAt);
   writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.iconName);
-  writer.writeString(offsets[4], object.searchText);
+  writer.writeString(offsets[3], object.field);
+  writer.writeString(offsets[4], object.researchQuestion);
   writer.writeLong(offsets[5], object.sortIndex);
   writer.writeString(offsets[6], object.title);
   writer.writeDateTime(offsets[7], object.updatedAt);
 }
 
-Topic _topicDeserialize(
+Project _projectDeserialize(
   Id id,
   IsarReader reader,
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Topic();
+  final object = Project();
   object.colorValue = reader.readLong(offsets[0]);
   object.createdAt = reader.readDateTime(offsets[1]);
   object.description = reader.readStringOrNull(offsets[2]);
-  object.iconName = reader.readStringOrNull(offsets[3]);
+  object.field = reader.readStringOrNull(offsets[3]);
   object.id = id;
-  object.searchText = reader.readString(offsets[4]);
+  object.researchQuestion = reader.readString(offsets[4]);
   object.sortIndex = reader.readLong(offsets[5]);
   object.title = reader.readString(offsets[6]);
   object.updatedAt = reader.readDateTime(offsets[7]);
   return object;
 }
 
-P _topicDeserializeProp<P>(
+P _projectDeserializeProp<P>(
   IsarReader reader,
   int propertyId,
   int offset,
@@ -191,51 +167,36 @@ P _topicDeserializeProp<P>(
   }
 }
 
-Id _topicGetId(Topic object) {
+Id _projectGetId(Project object) {
   return object.id;
 }
 
-List<IsarLinkBase<dynamic>> _topicGetLinks(Topic object) {
-  return [object.items];
+List<IsarLinkBase<dynamic>> _projectGetLinks(Project object) {
+  return [object.items, object.claims];
 }
 
-void _topicAttach(IsarCollection<dynamic> col, Id id, Topic object) {
+void _projectAttach(IsarCollection<dynamic> col, Id id, Project object) {
   object.id = id;
-  object.items.attach(col, col.isar.collection<Item>(), r'items', id);
+  object.items.attach(col, col.isar.collection<ResearchItem>(), r'items', id);
+  object.claims.attach(col, col.isar.collection<Claim>(), r'claims', id);
 }
 
-extension TopicQueryWhereSort on QueryBuilder<Topic, Topic, QWhere> {
-  QueryBuilder<Topic, Topic, QAfterWhere> anyId() {
+extension ProjectQueryWhereSort on QueryBuilder<Project, Project, QWhere> {
+  QueryBuilder<Project, Project, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
-
-  QueryBuilder<Topic, Topic, QAfterWhere> anyTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'title'),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhere> anySearchText() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'searchText'),
-      );
-    });
-  }
 }
 
-extension TopicQueryWhere on QueryBuilder<Topic, Topic, QWhereClause> {
-  QueryBuilder<Topic, Topic, QAfterWhereClause> idEqualTo(Id id) {
+extension ProjectQueryWhere on QueryBuilder<Project, Project, QWhereClause> {
+  QueryBuilder<Project, Project, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterWhereClause> idNotEqualTo(Id id) {
+  QueryBuilder<Project, Project, QAfterWhereClause> idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -257,7 +218,7 @@ extension TopicQueryWhere on QueryBuilder<Topic, Topic, QWhereClause> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterWhereClause> idGreaterThan(
+  QueryBuilder<Project, Project, QAfterWhereClause> idGreaterThan(
     Id id, {
     bool include = false,
   }) {
@@ -268,7 +229,7 @@ extension TopicQueryWhere on QueryBuilder<Topic, Topic, QWhereClause> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterWhereClause> idLessThan(
+  QueryBuilder<Project, Project, QAfterWhereClause> idLessThan(
     Id id, {
     bool include = false,
   }) {
@@ -279,7 +240,7 @@ extension TopicQueryWhere on QueryBuilder<Topic, Topic, QWhereClause> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterWhereClause> idBetween(
+  QueryBuilder<Project, Project, QAfterWhereClause> idBetween(
     Id lowerId,
     Id upperId, {
     bool includeLower = true,
@@ -296,310 +257,11 @@ extension TopicQueryWhere on QueryBuilder<Topic, Topic, QWhereClause> {
       );
     });
   }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleEqualTo(String title) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'title', value: [title]),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleNotEqualTo(String title) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'title',
-                lower: [],
-                upper: [title],
-                includeUpper: false,
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'title',
-                lower: [title],
-                includeLower: false,
-                upper: [],
-              ),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'title',
-                lower: [title],
-                includeLower: false,
-                upper: [],
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'title',
-                lower: [],
-                upper: [title],
-                includeUpper: false,
-              ),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleGreaterThan(
-    String title, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'title',
-          lower: [title],
-          includeLower: include,
-          upper: [],
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleLessThan(
-    String title, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'title',
-          lower: [],
-          upper: [title],
-          includeUpper: include,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleBetween(
-    String lowerTitle,
-    String upperTitle, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'title',
-          lower: [lowerTitle],
-          includeLower: includeLower,
-          upper: [upperTitle],
-          includeUpper: includeUpper,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleStartsWith(
-    String TitlePrefix,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'title',
-          lower: [TitlePrefix],
-          upper: ['$TitlePrefix\u{FFFFF}'],
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'title', value: ['']),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> titleIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'title', upper: ['']),
-            )
-            .addWhereClause(
-              IndexWhereClause.greaterThan(indexName: r'title', lower: ['']),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IndexWhereClause.greaterThan(indexName: r'title', lower: ['']),
-            )
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'title', upper: ['']),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextEqualTo(
-    String searchText,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'searchText', value: [searchText]),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextNotEqualTo(
-    String searchText,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [],
-                upper: [searchText],
-                includeUpper: false,
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [searchText],
-                includeLower: false,
-                upper: [],
-              ),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [searchText],
-                includeLower: false,
-                upper: [],
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.between(
-                indexName: r'searchText',
-                lower: [],
-                upper: [searchText],
-                includeUpper: false,
-              ),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextGreaterThan(
-    String searchText, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [searchText],
-          includeLower: include,
-          upper: [],
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextLessThan(
-    String searchText, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [],
-          upper: [searchText],
-          includeUpper: include,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextBetween(
-    String lowerSearchText,
-    String upperSearchText, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [lowerSearchText],
-          includeLower: includeLower,
-          upper: [upperSearchText],
-          includeUpper: includeUpper,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextStartsWith(
-    String SearchTextPrefix,
-  ) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.between(
-          indexName: r'searchText',
-          lower: [SearchTextPrefix],
-          upper: ['$SearchTextPrefix\u{FFFFF}'],
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IndexWhereClause.equalTo(indexName: r'searchText', value: ['']),
-      );
-    });
-  }
-
-  QueryBuilder<Topic, Topic, QAfterWhereClause> searchTextIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'searchText', upper: ['']),
-            )
-            .addWhereClause(
-              IndexWhereClause.greaterThan(
-                indexName: r'searchText',
-                lower: [''],
-              ),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IndexWhereClause.greaterThan(
-                indexName: r'searchText',
-                lower: [''],
-              ),
-            )
-            .addWhereClause(
-              IndexWhereClause.lessThan(indexName: r'searchText', upper: ['']),
-            );
-      }
-    });
-  }
 }
 
-extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> colorValueEqualTo(
+extension ProjectQueryFilter
+    on QueryBuilder<Project, Project, QFilterCondition> {
+  QueryBuilder<Project, Project, QAfterFilterCondition> colorValueEqualTo(
     int value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -609,7 +271,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> colorValueGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> colorValueGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -624,7 +286,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> colorValueLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> colorValueLessThan(
     int value, {
     bool include = false,
   }) {
@@ -639,7 +301,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> colorValueBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> colorValueBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -658,7 +320,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> createdAtEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> createdAtEqualTo(
     DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -668,7 +330,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> createdAtGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> createdAtGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -683,7 +345,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> createdAtLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> createdAtLessThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -698,7 +360,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> createdAtBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> createdAtBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -717,7 +379,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionIsNull() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'description'),
@@ -725,7 +387,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionIsNotNull() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'description'),
@@ -733,7 +395,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -748,7 +410,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -765,7 +427,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -782,7 +444,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -803,7 +465,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionStartsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -818,7 +480,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionEndsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -833,7 +495,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionContains(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionContains(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -848,7 +510,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionMatches(
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
@@ -863,7 +525,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionIsEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> descriptionIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'description', value: ''),
@@ -871,7 +533,8 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> descriptionIsNotEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  descriptionIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'description', value: ''),
@@ -879,30 +542,30 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameIsNull() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        const FilterCondition.isNull(property: r'iconName'),
+        const FilterCondition.isNull(property: r'field'),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameIsNotNull() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        const FilterCondition.isNotNull(property: r'iconName'),
+        const FilterCondition.isNotNull(property: r'field'),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -910,7 +573,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -919,7 +582,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
           include: include,
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -927,7 +590,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -936,7 +599,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
       return query.addFilterCondition(
         FilterCondition.lessThan(
           include: include,
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -944,7 +607,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -954,7 +617,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.between(
-          property: r'iconName',
+          property: r'field',
           lower: lower,
           includeLower: includeLower,
           upper: upper,
@@ -965,14 +628,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameStartsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -980,14 +643,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameEndsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -995,14 +658,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameContains(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldContains(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
-          property: r'iconName',
+          property: r'field',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1010,14 +673,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameMatches(
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
-          property: r'iconName',
+          property: r'field',
           wildcard: pattern,
           caseSensitive: caseSensitive,
         ),
@@ -1025,23 +688,23 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameIsEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        FilterCondition.equalTo(property: r'iconName', value: ''),
+        FilterCondition.equalTo(property: r'field', value: ''),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> iconNameIsNotEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> fieldIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        FilterCondition.greaterThan(property: r'iconName', value: ''),
+        FilterCondition.greaterThan(property: r'field', value: ''),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> idEqualTo(Id value) {
+  QueryBuilder<Project, Project, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'id', value: value),
@@ -1049,7 +712,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> idGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -1064,7 +727,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> idLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> idLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -1079,7 +742,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> idBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> idBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -1098,14 +761,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> researchQuestionEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1113,7 +776,8 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1122,7 +786,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
       return query.addFilterCondition(
         FilterCondition.greaterThan(
           include: include,
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1130,7 +794,8 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1139,7 +804,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
       return query.addFilterCondition(
         FilterCondition.lessThan(
           include: include,
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1147,7 +812,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> researchQuestionBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1157,7 +822,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.between(
-          property: r'searchText',
+          property: r'researchQuestion',
           lower: lower,
           includeLower: includeLower,
           upper: upper,
@@ -1168,14 +833,12 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1183,14 +846,12 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionEndsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.endsWith(
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1198,14 +859,12 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextContains(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.contains(
-          property: r'searchText',
+          property: r'researchQuestion',
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1213,14 +872,14 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextMatches(
+  QueryBuilder<Project, Project, QAfterFilterCondition> researchQuestionMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.matches(
-          property: r'searchText',
+          property: r'researchQuestion',
           wildcard: pattern,
           caseSensitive: caseSensitive,
         ),
@@ -1228,23 +887,25 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextIsEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        FilterCondition.equalTo(property: r'searchText', value: ''),
+        FilterCondition.equalTo(property: r'researchQuestion', value: ''),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> searchTextIsNotEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition>
+  researchQuestionIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
-        FilterCondition.greaterThan(property: r'searchText', value: ''),
+        FilterCondition.greaterThan(property: r'researchQuestion', value: ''),
       );
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> sortIndexEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> sortIndexEqualTo(
     int value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -1254,7 +915,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> sortIndexGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> sortIndexGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -1269,7 +930,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> sortIndexLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> sortIndexLessThan(
     int value, {
     bool include = false,
   }) {
@@ -1284,7 +945,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> sortIndexBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> sortIndexBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1303,7 +964,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1318,7 +979,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1335,7 +996,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1352,7 +1013,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1373,7 +1034,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleStartsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1388,7 +1049,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleEndsWith(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1403,7 +1064,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleContains(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleContains(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1418,7 +1079,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleMatches(
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleMatches(
     String pattern, {
     bool caseSensitive = true,
   }) {
@@ -1433,7 +1094,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleIsEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'title', value: ''),
@@ -1441,7 +1102,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> titleIsNotEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> titleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'title', value: ''),
@@ -1449,7 +1110,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> updatedAtEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> updatedAtEqualTo(
     DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -1459,7 +1120,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> updatedAtGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> updatedAtGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -1474,7 +1135,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> updatedAtLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> updatedAtLessThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -1489,7 +1150,7 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> updatedAtBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> updatedAtBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -1509,16 +1170,20 @@ extension TopicQueryFilter on QueryBuilder<Topic, Topic, QFilterCondition> {
   }
 }
 
-extension TopicQueryObject on QueryBuilder<Topic, Topic, QFilterCondition> {}
+extension ProjectQueryObject
+    on QueryBuilder<Project, Project, QFilterCondition> {}
 
-extension TopicQueryLinks on QueryBuilder<Topic, Topic, QFilterCondition> {
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> items(FilterQuery<Item> q) {
+extension ProjectQueryLinks
+    on QueryBuilder<Project, Project, QFilterCondition> {
+  QueryBuilder<Project, Project, QAfterFilterCondition> items(
+    FilterQuery<ResearchItem> q,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.link(q, r'items');
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsLengthEqualTo(
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsLengthEqualTo(
     int length,
   ) {
     return QueryBuilder.apply(this, (query) {
@@ -1526,19 +1191,19 @@ extension TopicQueryLinks on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsIsEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'items', 0, true, 0, true);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsIsNotEmpty() {
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'items', 0, false, 999999, true);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsLengthLessThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -1547,7 +1212,7 @@ extension TopicQueryLinks on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsLengthGreaterThan(
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -1556,7 +1221,7 @@ extension TopicQueryLinks on QueryBuilder<Topic, Topic, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterFilterCondition> itemsLengthBetween(
+  QueryBuilder<Project, Project, QAfterFilterCondition> itemsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1572,230 +1237,295 @@ extension TopicQueryLinks on QueryBuilder<Topic, Topic, QFilterCondition> {
       );
     });
   }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claims(
+    FilterQuery<Claim> q,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.link(q, r'claims');
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsLengthEqualTo(
+    int length,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claims', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claims', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claims', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claims', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'claims', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Project, Project, QAfterFilterCondition> claimsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+        r'claims',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
-extension TopicQuerySortBy on QueryBuilder<Topic, Topic, QSortBy> {
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByColorValue() {
+extension ProjectQuerySortBy on QueryBuilder<Project, Project, QSortBy> {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByColorValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorValue', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByColorValueDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByColorValueDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorValue', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByCreatedAt() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByCreatedAtDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByDescription() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByDescriptionDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByIconName() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByField() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconName', Sort.asc);
+      return query.addSortBy(r'field', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByIconNameDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByFieldDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconName', Sort.desc);
+      return query.addSortBy(r'field', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortBySearchText() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByResearchQuestion() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.asc);
+      return query.addSortBy(r'researchQuestion', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortBySearchTextDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByResearchQuestionDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.desc);
+      return query.addSortBy(r'researchQuestion', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortBySortIndex() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortBySortIndexDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortBySortIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByTitle() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByTitleDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByUpdatedAt() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> sortByUpdatedAtDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> sortByUpdatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
 
-extension TopicQuerySortThenBy on QueryBuilder<Topic, Topic, QSortThenBy> {
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByColorValue() {
+extension ProjectQuerySortThenBy
+    on QueryBuilder<Project, Project, QSortThenBy> {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByColorValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorValue', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByColorValueDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByColorValueDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'colorValue', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByCreatedAt() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByCreatedAtDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByCreatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByDescription() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByDescription() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByDescriptionDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByDescriptionDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'description', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByIconName() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByField() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconName', Sort.asc);
+      return query.addSortBy(r'field', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByIconNameDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByFieldDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'iconName', Sort.desc);
+      return query.addSortBy(r'field', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenById() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByIdDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenBySearchText() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByResearchQuestion() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.asc);
+      return query.addSortBy(r'researchQuestion', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenBySearchTextDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByResearchQuestionDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'searchText', Sort.desc);
+      return query.addSortBy(r'researchQuestion', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenBySortIndex() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenBySortIndexDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenBySortIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'sortIndex', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByTitle() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByTitleDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'title', Sort.desc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByUpdatedAt() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.asc);
     });
   }
 
-  QueryBuilder<Topic, Topic, QAfterSortBy> thenByUpdatedAtDesc() {
+  QueryBuilder<Project, Project, QAfterSortBy> thenByUpdatedAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'updatedAt', Sort.desc);
     });
   }
 }
 
-extension TopicQueryWhereDistinct on QueryBuilder<Topic, Topic, QDistinct> {
-  QueryBuilder<Topic, Topic, QDistinct> distinctByColorValue() {
+extension ProjectQueryWhereDistinct
+    on QueryBuilder<Project, Project, QDistinct> {
+  QueryBuilder<Project, Project, QDistinct> distinctByColorValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'colorValue');
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctByCreatedAt() {
+  QueryBuilder<Project, Project, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctByDescription({
+  QueryBuilder<Project, Project, QDistinct> distinctByDescription({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1803,29 +1533,32 @@ extension TopicQueryWhereDistinct on QueryBuilder<Topic, Topic, QDistinct> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctByIconName({
+  QueryBuilder<Project, Project, QDistinct> distinctByField({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'iconName', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'field', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctBySearchText({
+  QueryBuilder<Project, Project, QDistinct> distinctByResearchQuestion({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'searchText', caseSensitive: caseSensitive);
+      return query.addDistinctBy(
+        r'researchQuestion',
+        caseSensitive: caseSensitive,
+      );
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctBySortIndex() {
+  QueryBuilder<Project, Project, QDistinct> distinctBySortIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'sortIndex');
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctByTitle({
+  QueryBuilder<Project, Project, QDistinct> distinctByTitle({
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1833,63 +1566,64 @@ extension TopicQueryWhereDistinct on QueryBuilder<Topic, Topic, QDistinct> {
     });
   }
 
-  QueryBuilder<Topic, Topic, QDistinct> distinctByUpdatedAt() {
+  QueryBuilder<Project, Project, QDistinct> distinctByUpdatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'updatedAt');
     });
   }
 }
 
-extension TopicQueryProperty on QueryBuilder<Topic, Topic, QQueryProperty> {
-  QueryBuilder<Topic, int, QQueryOperations> idProperty() {
+extension ProjectQueryProperty
+    on QueryBuilder<Project, Project, QQueryProperty> {
+  QueryBuilder<Project, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
     });
   }
 
-  QueryBuilder<Topic, int, QQueryOperations> colorValueProperty() {
+  QueryBuilder<Project, int, QQueryOperations> colorValueProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'colorValue');
     });
   }
 
-  QueryBuilder<Topic, DateTime, QQueryOperations> createdAtProperty() {
+  QueryBuilder<Project, DateTime, QQueryOperations> createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
     });
   }
 
-  QueryBuilder<Topic, String?, QQueryOperations> descriptionProperty() {
+  QueryBuilder<Project, String?, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
     });
   }
 
-  QueryBuilder<Topic, String?, QQueryOperations> iconNameProperty() {
+  QueryBuilder<Project, String?, QQueryOperations> fieldProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'iconName');
+      return query.addPropertyName(r'field');
     });
   }
 
-  QueryBuilder<Topic, String, QQueryOperations> searchTextProperty() {
+  QueryBuilder<Project, String, QQueryOperations> researchQuestionProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'searchText');
+      return query.addPropertyName(r'researchQuestion');
     });
   }
 
-  QueryBuilder<Topic, int, QQueryOperations> sortIndexProperty() {
+  QueryBuilder<Project, int, QQueryOperations> sortIndexProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sortIndex');
     });
   }
 
-  QueryBuilder<Topic, String, QQueryOperations> titleProperty() {
+  QueryBuilder<Project, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'title');
     });
   }
 
-  QueryBuilder<Topic, DateTime, QQueryOperations> updatedAtProperty() {
+  QueryBuilder<Project, DateTime, QQueryOperations> updatedAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'updatedAt');
     });

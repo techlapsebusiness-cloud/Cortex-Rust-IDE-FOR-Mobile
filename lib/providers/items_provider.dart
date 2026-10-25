@@ -7,32 +7,34 @@ import 'package:isar_community/isar.dart';
 import '../data/enrichment/link_preview_service.dart';
 import '../data/enrichment/video_thumb_service.dart';
 import '../data/file_storage.dart';
-import '../data/models/item.dart';
-import '../data/models/item_type.dart';
-import '../data/models/topic.dart';
+import '../data/models/claim.dart';
+import '../data/models/project.dart';
+import '../data/models/research_enums.dart';
+import '../data/models/research_item.dart';
+import 'claims_provider.dart';
 import 'isar_provider.dart';
 
 enum FeedFilter { all, text, links, images, videos, files }
 
-final feedFilterProvider = StateProvider.family<FeedFilter, int>((ref, topicId) {
-  return FeedFilter.all;
-});
+final feedFilterProvider =
+    StateProvider.family<FeedFilter, int>((ref, projectId) => FeedFilter.all);
 
-final feedQueryProvider = StateProvider.family<String, int>((ref, topicId) {
-  return '';
-});
+final feedQueryProvider =
+    StateProvider.family<String, int>((ref, projectId) => '');
 
-/// Per-topic tag filter for the feed.
-final feedTagFilterProvider = StateProvider.family<String?, int>((ref, topicId) {
-  return null;
-});
+final feedTagFilterProvider =
+    StateProvider.family<String?, int>((ref, projectId) => null);
 
-final topicItemsProvider =
-    StreamProvider.family<List<Item>, int>((ref, topicId) async* {
-  final isar = await ref.watch(isarProvider.future);
-  yield* isar.items
+/// Active stage in the project workspace (`null` = Overview).
+final selectedStageProvider =
+    StateProvider.family<ResearchStage?, int>((ref, projectId) => null);
+
+final projectItemsProvider =
+    StreamProvider.family<List<ResearchItem>, int>((ref, projectId) {
+  final isar = ref.watch(isarProvider);
+  return isar.researchItems
       .filter()
-      .topic((q) => q.idEqualTo(topicId))
+      .project((q) => q.idEqualTo(projectId))
       .watch(fireImmediately: true)
       .map((list) {
     final sorted = [...list];
@@ -45,45 +47,77 @@ final topicItemsProvider =
   });
 });
 
-final filteredTopicItemsProvider =
-    Provider.family<AsyncValue<List<Item>>, int>((ref, topicId) {
-  final items = ref.watch(topicItemsProvider(topicId));
-  final filter = ref.watch(feedFilterProvider(topicId));
-  final query = ref.watch(feedQueryProvider(topicId)).trim().toLowerCase();
-  final tag = ref.watch(feedTagFilterProvider(topicId))?.toLowerCase();
+final stageItemsProvider =
+    Provider.family<AsyncValue<List<ResearchItem>>, (int, ResearchStage)>(
+        (ref, key) {
+  final (projectId, stage) = key;
+  final items = ref.watch(projectItemsProvider(projectId));
+  return items.whenData(
+    (list) => list.where((i) => i.stage == stage).toList(),
+  );
+});
+
+final filteredProjectItemsProvider =
+    Provider.family<AsyncValue<List<ResearchItem>>, int>((ref, projectId) {
+  final items = ref.watch(projectItemsProvider(projectId));
+  final filter = ref.watch(feedFilterProvider(projectId));
+  final query = ref.watch(feedQueryProvider(projectId)).trim().toLowerCase();
+  final tag = ref.watch(feedTagFilterProvider(projectId));
+  final stage = ref.watch(selectedStageProvider(projectId));
 
   return items.whenData((list) {
-    Iterable<Item> out = list;
-    switch (filter) {
-      case FeedFilter.all:
-        break;
-      case FeedFilter.text:
-        out = out.where((i) => i.type == ItemType.text);
-      case FeedFilter.links:
-        out = out.where((i) => i.type == ItemType.link);
-      case FeedFilter.images:
-        out = out.where((i) => i.type == ItemType.image);
-      case FeedFilter.videos:
-        out = out.where((i) => i.type == ItemType.video);
-      case FeedFilter.files:
-        out = out.where((i) => i.type == ItemType.file);
-    }
-    if (query.isNotEmpty) {
-      out = out.where((i) => i.searchText.contains(query));
-    }
-    if (tag != null && tag.isNotEmpty) {
-      out = out.where(
-        (i) => i.tags.any((t) => t.toLowerCase() == tag),
-      );
-    }
-    return out.toList();
+    return list.where((i) {
+      if (stage != null && i.stage != stage) return false;
+      if (tag != null &&
+          !i.tags.map((t) => t.toLowerCase()).contains(tag.toLowerCase())) {
+        return false;
+      }
+      final typeOk = switch (filter) {
+        FeedFilter.all => true,
+        FeedFilter.text => i.type == ItemType.text,
+        FeedFilter.links => i.type == ItemType.link,
+        FeedFilter.images => i.type == ItemType.image,
+        FeedFilter.videos => i.type == ItemType.video,
+        FeedFilter.files => i.type == ItemType.file,
+      };
+      if (!typeOk) return false;
+      if (query.isEmpty) return true;
+      final blob = [
+        i.text ?? '',
+        i.note ?? '',
+        i.previewTitle ?? '',
+        i.previewDescription ?? '',
+        i.fileName ?? '',
+        i.sourceUrl ?? '',
+        i.citation ?? '',
+        ...i.tags,
+      ].join(' ').toLowerCase();
+      return blob.contains(query);
+    }).toList();
+  });
+});
+
+/// Items with a sourceUrl or citation for the References stage view.
+final projectReferencesProvider =
+    Provider.family<AsyncValue<List<ResearchItem>>, int>((ref, projectId) {
+  final items = ref.watch(projectItemsProvider(projectId));
+  return items.whenData((list) {
+    final refs = list.where((i) {
+      final url = i.sourceUrl?.trim() ?? '';
+      final cite = i.citation?.trim() ?? '';
+      return url.isNotEmpty || cite.isNotEmpty;
+    }).toList()
+      ..sort((a, b) => (a.previewTitle ?? a.sourceUrl ?? '')
+          .toLowerCase()
+          .compareTo((b.previewTitle ?? b.sourceUrl ?? '').toLowerCase()));
+    return refs;
   });
 });
 
 final itemByIdProvider =
-    StreamProvider.family<Item?, int>((ref, itemId) async* {
-  final isar = await ref.watch(isarProvider.future);
-  yield* isar.items.watchObject(itemId, fireImmediately: true);
+    StreamProvider.family<ResearchItem?, int>((ref, id) {
+  final isar = ref.watch(isarProvider);
+  return isar.researchItems.watchObject(id, fireImmediately: true);
 });
 
 class ItemsRepository {
@@ -91,62 +125,83 @@ class ItemsRepository {
 
   final Isar _isar;
 
-  Future<Item> addText({
-    required Topic topic,
+  Future<ResearchItem> addText({
+    required Project project,
     required String text,
+    ResearchStage stage = ResearchStage.evidence,
     String? note,
     List<String> tags = const [],
     String? sourceUrl,
+    Claim? claim,
+    Stance stance = Stance.neutral,
+    Credibility credibility = Credibility.unknown,
   }) {
     return _putItem(
-      topic: topic,
+      project: project,
       type: ItemType.text,
+      stage: stage,
       text: text.trim(),
       note: note,
       tags: tags,
       sourceUrl: sourceUrl,
+      claim: claim,
+      stance: stance,
+      credibility: credibility,
     );
   }
 
-  Future<Item> addLink({
-    required Topic topic,
+  Future<ResearchItem> addLink({
+    required Project project,
     required String url,
+    ResearchStage stage = ResearchStage.evidence,
     String? note,
     List<String> tags = const [],
+    Claim? claim,
+    Stance stance = Stance.neutral,
+    Credibility credibility = Credibility.unknown,
   }) async {
     final cleaned = url.trim();
     final item = await _putItem(
-      topic: topic,
+      project: project,
       type: ItemType.link,
+      stage: stage,
       sourceUrl: cleaned,
       previewTitle: cleaned,
       note: note,
       tags: tags,
+      claim: claim,
+      stance: stance,
+      credibility: credibility,
+      citation: cleaned,
     );
-    // Non-blocking: skeleton card shows until cache lands (§11).
     unawaited(LinkPreviewService.enrich(item, _isar));
     return item;
   }
 
-  Future<Item> addFileFromPath({
-    required Topic topic,
+  Future<ResearchItem> addFileFromPath({
+    required Project project,
     required String path,
     required ItemType type,
+    ResearchStage stage = ResearchStage.evidence,
     String? fileName,
     String? mimeType,
     String? note,
     List<String> tags = const [],
     String? sourceUrl,
+    Claim? claim,
+    Stance stance = Stance.neutral,
+    Credibility credibility = Credibility.unknown,
   }) async {
     final stored = await FileStorage.copyFile(
       source: File(path),
-      topicId: topic.id,
+      projectId: project.id,
       preferredName: fileName,
       mimeType: mimeType,
     );
     final item = await _putItem(
-      topic: topic,
+      project: project,
       type: type,
+      stage: stage,
       fileRelPath: stored.relativePath,
       fileName: stored.fileName,
       mimeType: stored.mimeType,
@@ -154,6 +209,9 @@ class ItemsRepository {
       note: note,
       tags: tags,
       sourceUrl: sourceUrl,
+      claim: claim,
+      stance: stance,
+      credibility: credibility,
     );
     if (type == ItemType.video) {
       unawaited(VideoThumbService.generate(item, _isar));
@@ -161,25 +219,30 @@ class ItemsRepository {
     return item;
   }
 
-  Future<Item> addFileFromBytes({
-    required Topic topic,
+  Future<ResearchItem> addFileFromBytes({
+    required Project project,
     required List<int> bytes,
     required ItemType type,
     required String fileName,
+    ResearchStage stage = ResearchStage.evidence,
     String? mimeType,
     String? note,
     List<String> tags = const [],
     String? sourceUrl,
+    Claim? claim,
+    Stance stance = Stance.neutral,
+    Credibility credibility = Credibility.unknown,
   }) async {
     final stored = await FileStorage.writeBytes(
       bytes: bytes,
-      topicId: topic.id,
+      projectId: project.id,
       fileName: fileName,
       mimeType: mimeType,
     );
     final item = await _putItem(
-      topic: topic,
+      project: project,
       type: type,
+      stage: stage,
       fileRelPath: stored.relativePath,
       fileName: stored.fileName,
       mimeType: stored.mimeType,
@@ -187,6 +250,9 @@ class ItemsRepository {
       note: note,
       tags: tags,
       sourceUrl: sourceUrl,
+      claim: claim,
+      stance: stance,
+      credibility: credibility,
     );
     if (type == ItemType.video) {
       unawaited(VideoThumbService.generate(item, _isar));
@@ -194,9 +260,10 @@ class ItemsRepository {
     return item;
   }
 
-  Future<Item> _putItem({
-    required Topic topic,
+  Future<ResearchItem> _putItem({
+    required Project project,
     required ItemType type,
+    required ResearchStage stage,
     String? text,
     String? note,
     String? sourceUrl,
@@ -207,13 +274,18 @@ class ItemsRepository {
     String? previewTitle,
     String? previewDescription,
     String? previewImageUrl,
+    String? citation,
     List<String> tags = const [],
+    Claim? claim,
+    Stance stance = Stance.neutral,
+    Credibility credibility = Credibility.unknown,
   }) async {
-    await topic.items.load();
-    final count = topic.items.length;
+    await project.items.load();
+    final count = project.items.length;
 
-    final item = Item()
+    final item = ResearchItem()
       ..type = type
+      ..stage = stage
       ..text = text
       ..note = _emptyToNull(note)
       ..sourceUrl = _emptyToNull(sourceUrl)
@@ -224,57 +296,94 @@ class ItemsRepository {
       ..previewTitle = previewTitle
       ..previewDescription = previewDescription
       ..previewImageUrl = previewImageUrl
+      ..citation = citation
       ..tags = tags.map((t) => t.trim()).where((t) => t.isNotEmpty).toList()
+      ..stance = stance
+      ..credibility = credibility
       ..createdAt = DateTime.now()
-      ..sortIndex = count
-      ..rebuildSearchText();
+      ..sortIndex = count;
 
     await _isar.writeTxn(() async {
-      await _isar.items.put(item);
-      item.topic.value = topic;
-      await item.topic.save();
-      topic.updatedAt = DateTime.now();
-      await _isar.topics.put(topic);
+      await _isar.researchItems.put(item);
+      item.project.value = project;
+      await item.project.save();
+      if (claim != null) {
+        item.claim.value = claim;
+        await item.claim.save();
+      }
+      project.updatedAt = DateTime.now();
+      await _isar.projects.put(project);
     });
+
+    if (claim != null) {
+      unawaited(ClaimsRepository(_isar).recompute(claim));
+    }
     return item;
   }
 
   Future<void> updateMeta(
-    Item item, {
+    ResearchItem item, {
     String? note,
     List<String>? tags,
     String? text,
+    ResearchStage? stage,
+    Claim? claim,
+    bool clearClaim = false,
+    Stance? stance,
+    Credibility? credibility,
   }) async {
     if (note != null) item.note = _emptyToNull(note);
     if (tags != null) {
       item.tags = tags.map((t) => t.trim()).where((t) => t.isNotEmpty).toList();
     }
     if (text != null) item.text = text.trim();
-    item.rebuildSearchText();
+    if (stage != null) item.stage = stage;
+    if (stance != null) item.stance = stance;
+    if (credibility != null) item.credibility = credibility;
+
+    Claim? oldClaim;
+    await item.claim.load();
+    oldClaim = item.claim.value;
 
     await _isar.writeTxn(() async {
-      await _isar.items.put(item);
-      await item.topic.load();
-      final topic = item.topic.value;
-      if (topic != null) {
-        topic.updatedAt = DateTime.now();
-        await _isar.topics.put(topic);
+      if (clearClaim) {
+        item.claim.value = null;
+        await item.claim.save();
+        item.stance = Stance.neutral;
+      } else if (claim != null) {
+        item.claim.value = claim;
+        await item.claim.save();
+      }
+      await _isar.researchItems.put(item);
+      await item.project.load();
+      final project = item.project.value;
+      if (project != null) {
+        project.updatedAt = DateTime.now();
+        await _isar.projects.put(project);
       }
     });
+
+    final claimsRepo = ClaimsRepository(_isar);
+    if (oldClaim != null) unawaited(claimsRepo.recompute(oldClaim));
+    final next = clearClaim ? null : (claim ?? oldClaim);
+    if (next != null && next.id != oldClaim?.id) {
+      unawaited(claimsRepo.recompute(next));
+    } else if (next != null) {
+      unawaited(claimsRepo.recompute(next));
+    }
   }
 
-  Future<void> moveToTopic(Item item, Topic target) async {
-    await item.topic.load();
-    final old = item.topic.value;
+  Future<void> moveToProject(ResearchItem item, Project target) async {
+    await item.project.load();
+    final old = item.project.value;
 
-    // Relocate file under new topic folder if present.
     if (item.fileRelPath != null) {
       final abs = await FileStorage.absoluteFromRelative(item.fileRelPath!);
       final source = File(abs);
       if (await source.exists()) {
         final stored = await FileStorage.copyFile(
           source: source,
-          topicId: target.id,
+          projectId: target.id,
           preferredName: item.fileName,
           mimeType: item.mimeType,
         );
@@ -284,33 +393,37 @@ class ItemsRepository {
     }
 
     await _isar.writeTxn(() async {
-      item.topic.value = target;
-      await item.topic.save();
-      await _isar.items.put(item);
+      item.project.value = target;
+      await item.project.save();
+      await _isar.researchItems.put(item);
       target.updatedAt = DateTime.now();
-      await _isar.topics.put(target);
+      await _isar.projects.put(target);
       if (old != null && old.id != target.id) {
         old.updatedAt = DateTime.now();
-        await _isar.topics.put(old);
+        await _isar.projects.put(old);
       }
     });
   }
 
-  Future<void> delete(Item item) async {
+  Future<void> delete(ResearchItem item) async {
     await FileStorage.deleteRelative(item.fileRelPath);
-    await FileStorage.deleteRelative(item.thumbRelPath);
     if (LinkPreviewService.isCachedLocalPath(item.previewImageUrl)) {
       await FileStorage.deleteRelative(item.previewImageUrl);
     }
-    await item.topic.load();
-    final topic = item.topic.value;
+    await item.project.load();
+    await item.claim.load();
+    final project = item.project.value;
+    final claim = item.claim.value;
     await _isar.writeTxn(() async {
-      await _isar.items.delete(item.id);
-      if (topic != null) {
-        topic.updatedAt = DateTime.now();
-        await _isar.topics.put(topic);
+      await _isar.researchItems.delete(item.id);
+      if (project != null) {
+        project.updatedAt = DateTime.now();
+        await _isar.projects.put(project);
       }
     });
+    if (claim != null) {
+      unawaited(ClaimsRepository(_isar).recompute(claim));
+    }
   }
 
   static String? _emptyToNull(String? v) {
@@ -350,7 +463,6 @@ class ItemsRepository {
   }
 }
 
-final itemsRepositoryProvider = Provider<AsyncValue<ItemsRepository>>((ref) {
-  final isar = ref.watch(isarProvider);
-  return isar.whenData(ItemsRepository.new);
+final itemsRepositoryProvider = Provider<ItemsRepository>((ref) {
+  return ItemsRepository(ref.watch(isarProvider));
 });

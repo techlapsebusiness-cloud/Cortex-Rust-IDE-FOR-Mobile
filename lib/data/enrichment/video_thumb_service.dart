@@ -7,15 +7,16 @@ import 'package:uuid/uuid.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../file_storage.dart';
-import '../models/item.dart';
+import '../models/research_item.dart';
 
 /// Generates a local thumbnail for captured video files (§5).
+/// Stored on [ResearchItem.previewImageUrl] (schema has no separate thumb field).
 class VideoThumbService {
   VideoThumbService._();
 
   static const _uuid = Uuid();
 
-  static Future<void> generate(Item item, Isar isar) async {
+  static Future<void> generate(ResearchItem item, Isar isar) async {
     final rel = item.fileRelPath;
     if (rel == null || rel.isEmpty) return;
 
@@ -38,12 +39,12 @@ class VideoThumbService {
       await dest.parent.create(recursive: true);
       await dest.writeAsBytes(bytes, flush: true);
 
-      final fresh = await isar.items.get(item.id);
+      final fresh = await isar.researchItems.get(item.id);
       if (fresh == null) return;
-      fresh.thumbRelPath = thumbRel;
+      fresh.previewImageUrl = thumbRel;
 
       await isar.writeTxn(() async {
-        await isar.items.put(fresh);
+        await isar.researchItems.put(fresh);
       });
     } catch (e, st) {
       debugPrint('CORTEX video thumb failed: $e\n$st');

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../data/models/item_type.dart';
+import '../../../data/models/research_enums.dart';
 import '../../../theme/cortex_colors.dart';
 import '../../../theme/cortex_theme.dart';
 

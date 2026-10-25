@@ -4,6 +4,8 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+import 'data/isar_service.dart';
+import 'providers/isar_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,5 +25,14 @@ Future<void> main() async {
     await FlutterDisplayMode.setHighRefreshRate();
   } catch (_) {}
 
-  runApp(const ProviderScope(child: CortexApp()));
+  final isar = await IsarService.open();
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        isarProvider.overrideWithValue(isar),
+      ],
+      child: const CortexApp(),
+    ),
+  );
 }
